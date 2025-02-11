@@ -1,0 +1,1360 @@
+<?php   
+
+include_once("../../../libs.inc");
+$dt_inter = date("d/m/Y");
+
+$browser_cliente = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+
+if(strpos($browser_cliente, 'Gecko') !== false) {?>
+<link rel="stylesheet" type="text/css" href="../../../../css/atendimentoFF.css" />
+<?}
+elseif(strpos($browser_cliente, 'MSIE') !== false) {?>
+<link rel="stylesheet" type="text/css" href="../../../../css/atendimentoIE.css" />
+<?php }else {?>
+<link rel="stylesheet" type="text/css" href="../../../../css/atendimentoIE.css" />
+<? } ?> 
+<link type="text/css" rel="stylesheet" href="../../../../js/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css?random=20051112" media="screen"></LINK>
+<SCRIPT type="text/javascript" src="../../../../js/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js?random=20060118"></script>
+<script type="text/javascript" language="JavaScript">
+function AbreItens(div_do_item){
+var sn = document.getElementById('div_item').value;
+		
+	if(sn == ''){
+		document.getElementById('div_item').value = div_do_item;
+		document.getElementById(div_do_item).style.display = "block";
+	} else {
+		if (sn == div_do_item){
+			document.getElementById(div_do_item).style.display = "none";
+			document.getElementById('div_item').value = '';   
+			return false;
+		}            
+		document.getElementById(sn).style.display = "none";
+		document.getElementById(div_do_item).style.display = "block";
+		document.getElementById('div_item').value = div_do_item;
+	}
+}
+
+function mudaDisplay(nome_div,valor){
+
+	if (valor!= '0'){
+		if (document.getElementById(nome_div).style.display=='block'){
+			document.getElementById(nome_div).style.display = "none";
+		
+		}else {
+		
+			document.getElementById(nome_div).style.display = "block";
+		}
+	}else{
+		document.getElementById(nome_div).style.display = "none";
+	}
+}
+
+
+function Trim(str){return str.replace(/^\s+|\s+$/g,"");}
+
+function validaForm(situacao){
+
+	var frc_cardiaca  =  document.getElementById('frc_cardiaca').value;
+	var respiracao  =  document.getElementById('respiracao').value;
+	var pa  =  document.getElementById('pa').value;
+	var SaO2AA  =  document.getElementById('SaO2AA').value;
+	var SaO202  =  document.getElementById('SaO202').value;
+	
+	
+	if (Trim(frc_cardiaca) == '') {
+		AlertErro('frc_cardiaca');HabilitaFocus('frc_cardiaca','item2'); return false;}
+
+	if (Trim(respiracao) == '') {
+		AlertErro('respiracao');HabilitaFocus('respiracao','item2'); return false;}
+		
+	if (Trim(pa) == '') {
+		AlertErro('pa');HabilitaFocus('pa','item2'); return false;}
+	
+	if (Trim(SaO2AA) == '') {
+		AlertErro('SaO2AA');HabilitaFocus('SaO2AA','item2'); return false;}
+	
+	if (Trim(SaO202) == '') {
+		AlertErro('SaO202');HabilitaFocus('SaO202','item2'); return false;}
+		
+	if (document.getElementById('dispositivo_auxiliar_MB1').checked) {
+		if (document.getElementById('qtd_muleta').value == '0'){
+			AlertErro('com a quantidade de muletas');HabilitaFocus('qtd_muleta','item1'); return false;}	
+	}
+	
+	if (document.getElementById('dispositivo_auxiliar_MB2').checked) {
+		if (document.getElementById('qtd_bengala').value == '0'){
+			AlertErro('com a quantidade de bengalas');HabilitaFocus('qtd_bengala','item1'); return false;}	
+	}
+	
+	
+	if (Trim(situacao) == 'incluido'){
+		document.getElementById('finalizado').value = 'N';
+		formAvFisioterapeutica.submit();
+	}else{
+		document.getElementById('finalizado').value = 'S';
+		formAvFisioterapeutica.submit();
+	}
+	
+
+
+	
+}
+
+function AlertErro(campo){
+	alert ('Favor preencher o campo '+campo+'.');
+}
+
+function HabilitaFocus(campo,div){
+
+		if(div=='item2'){
+		  document.getElementById('item2').style.display="block";document.getElementById('item1').style.display="none";  document.getElementById('item3').style.display="none"; document.getElementById('item4').style.display="none"; document.getElementById('item5').style.display="none"; document.getElementById('item6').style.display="none";document.getElementById('item7').style.display="none";document.getElementById(campo).focus(); 
+		}
+		
+}
+
+
+function checar(){
+	if (document.getElementById('musculo_outro').checked){
+		 document.getElementById('especifique_musculo').style.display="block";
+	}else{
+		document.getElementById('especifique_musculo').style.display="none";
+		document.getElementById('especifique_musculo_outro').value="";
+	}
+	
+	
+	
+	if (document.getElementById('necessita_avaliacao_S').checked) {
+		 document.getElementById('avg_neurologica').style.display="block";
+	}else{
+		document.getElementById('avg_neurologica').style.display="none";
+		
+	}
+	
+	if (document.getElementById('dispositivo_auxiliar_MB1').checked) {
+		 document.getElementById('qtd_muleta').style.display="";
+	}else{
+		document.getElementById('qtd_muleta').style.display="none";
+		document.getElementById('qtd_bengala').value = '0';
+		
+	}
+	
+	if (document.getElementById('dispositivo_auxiliar_MB2').checked) {
+		 document.getElementById('qtd_bengala').style.display="";
+	}else{
+		document.getElementById('qtd_bengala').style.display="none";
+		document.getElementById('qtd_muleta').value = '0';
+		
+	}
+	
+	
+}
+
+9
+	
+	
+	
+	
+	
+	
+	
+
+
+}
+
+</script>
+
+<?
+
+$codInternacao = $_REQUEST['codInternacao'];
+$codFunc = $_REQUEST['codFunc'];
+$codUsuario = $_SESSION['co_usuario'];
+$codPessoa = $_REQUEST['codPessoa'];
+$codPaci = $_REQUEST['codPaci'];
+
+$listaUsuario = new Conn(); //instância do banco
+$listaUsuario->setSQL("exec sp_busca_espec_e_grpfunc_por_codusuario ".$codUsuario);
+$usuario = mssql_fetch_array($listaUsuario->getObjQuery());    
+$codEspec = $usuario['CodEspec'];
+$CodGrpFunc = $usuario['CodGrpFunc'];
+
+
+
+
+
+  $banco = new Conn(); //instância do banco
+  $banco->setSQL("exec sp_busca_paciente_internacao ".$codInternacao);
+//  echo "exec sp_busca_paciente_internacao ".$codInternacao;
+  
+  $valor = mssql_fetch_array($banco->getObjQuery());
+  $paciente = $valor['Nome'];
+  $prontuario = $valor['NumProntuario'];
+  $dataNasc = $valor['DtNasc'];
+  $sexo = $valor['sexo'];
+  $endereco = $valor['Rua'].$valor['Complemento'].$valor['Numero'].$valor['Bairro'];
+  $cep = $valor['CEP'];
+  $cidade = $valor['cidade'];
+  $estado = $valor['CodEstado'];
+  $nacionalidade = $valor['CodPais'];
+  $NumeroDoc = $valor['NumeroDoc'];
+  $orgao = $valor['ObsOrgao'];
+  $diagnostico = $valor['obs'];
+  $data_internacao = $valor['datainternacao'];
+  $idade = $valor['idade'];
+  $peso = $valor['peso'];
+  $altura = $valor['altura'];
+  $dataNasc = $valor['DtNasc'];
+  $grupoSanguineo = $valor['GrpSang'];
+  $fatorRh = $valor['FatorRH'];
+  $pulso = $valor['pulso'];
+  $pa = $valor['pa'];
+  $temperatura = $valor['temperatura'];
+  $tipo_leito   =  $valor['tp_leito_id'];
+  $leito =  $valor['codLeito'];
+  $id_leito =  $valor['idLeito'];
+
+ 
+  if($tipo_leito=="38"){
+  	
+  	$leito.=" CTI";
+  	
+  }
+  
+if($sexo=="M"){
+	$sexo = "Masculino";
+}else	if($sexo=="F"){
+	$sexo = "Feminino";
+}else{
+
+	$sexo = "";
+}	  
+
+
+
+
+
+  $banco2 = new Conn(); //instância do banco
+  $banco2->setSQL("select top 1 *,
+  CONVERT(char(10),dt_ultimo_exame, 103) as dt_ultimo_exame  
+  from formularios.dbo.tb_ficha_avaliacao_fisioterapeutica where internacao_id = ".$codInternacao." order by id desc");
+//  echo "exec sp_busca_paciente_internacao ".$codInternacao;
+  
+  $valor2 = mssql_fetch_array($banco2->getObjQuery());
+
+
+$numero_total_de_registros = mssql_num_rows(($banco2->getObjQuery()));
+$manutencao_mobilidade_articular = $valor2['manutencao_mob_art'];
+$deficit_equilibrio_coordenacao = $valor2['deficit_eq_coord'];
+$diminuicao_capacidade_funcional = $valor2['diminuicao_cap_func'];
+
+// CHAMO A STORED FUNCTION QUE LISTA OS REGISTROS DA TABELA
+  $bancoDadosPessoais = new Conn(); //intância do banco
+  
+  $bancoDadosPessoais->setSQL("select  *, convert( char(10), dt_cadastro, 103) as dt_cadastro,CONVERT(CHAR(8),dt_cadastro,8) as hr_cadastro ,CONVERT(CHAR(5),glicemia_hora,8) as glicemia_hora,codUsuario
+  from tb_dados_pessoais where fk_cod_pessoa =".$codPessoa." and internacao_id = ".$codInternacao );
+  
+$numero_total_de_registros_dados_pessoais = mssql_num_rows(($bancoDadosPessoais->getObjQuery()));  
+
+if($numero_total_de_registros_dados_pessoais==0){
+	$acaoDadosPessoais = 'I';
+} else {
+	$acaoDadosPessoais = 'A';
+} 
+
+
+
+
+
+if($numero_total_de_registros==0){
+	$acao = 'I';
+} else {
+	$acao = 'A';
+} 
+    
+if ($acao == 'I'){
+
+$id = '';
+$laboratorio ='';
+
+$tempo_diagnostico_doenca ='';
+$hipotese_diagnostica ='';
+$cv ='';
+$cd4 ='';
+$dt_ultimo_exame =date("d/m/Y");
+
+$Tb_ocupacao_principal = '';
+
+$performance_status ='';
+$dispositivo_auxiliar ='';
+
+$estado_mental ='';
+$dor ='';
+$local_dor='';
+
+$inspecao_edema = '';	
+$inspecao_Cicatriz = '';
+$inspecao_ulcera = '';
+$inspecao_outros = '';	
+
+$inspecao_caqueixa = '';	
+$inspecao_contraturas = '';	
+$inspecao_deformidade = '';	
+$inspecao_atrofia = '';	
+$musculo_outro= '';
+$especifique_musculo_outro = '';
+
+$abducao_ombro_direito = '';	
+$abducao_ombro_esquerdo = '';
+$flexao_cotovelo_direito = '';
+$flexao_cotovelo_esquerdo = '';
+$extensao_punho_direito = '';
+$extensao_punho_esquerdo = '';
+$flexao_quadril_direito = '';
+$flexao_quadril_esquerdo = '';
+$extensao_joelho_direito = '';
+$extensao_joelho_esquerdo = '';
+$dorsiplexao_direito = '';
+$dorsiplexao_esquerdo = '';
+
+$necessita_avaliacao = '';
+
+$local_sensibilidade = '';
+
+$bicipal_esquerdo ='';
+$bicipal_direito ='';
+$tricipital_esquerdo ='';
+$tricipital_direito ='';
+$patelar_esquerdo ='';
+$patelar_direito ='';
+$aquileu_esquerdo ='';
+$aquileu_direito ='';
+
+$sinal_babinski_esquerdo ='';
+$rfl_super_esquerdo = '';
+$sinal_babinski_direito ='';
+$rfl_super_direito =  '';
+
+$clonus_esquerdo ='';
+$clonus_direito ='';
+
+$tonus_esquerdo ='';
+$local_tonus_esquerdo = '';
+$tonus_direito ='';
+$local_tonus_direito = '';
+
+
+$coordenacao = '';
+$obs_avlMuscular = '';
+
+$frc_cardiaca = '';
+$respiracao = '';
+$pa = '';
+$SaO2AA ='';
+$SaO202 ='';
+
+$disp_durante_exer = '';
+$falta_ar_andando_apress = '';
+$anda_devagar_p_resp = '';
+$para_resp_dps_andar = '';
+$falta_ar_precisa_ajuda = '';
+
+$sensacao_dispneia='';
+
+$via_aerea_sem = '';
+$via_aerea_tot = '';
+$via_aerea_tqt = '';
+
+$tosse_eficaz = '';
+$tosse_ineficaz = '';
+$tosse_necessita_aspiracao = '';
+
+$ausculta_pulmonar ='';
+
+$exames_complementares = '';
+
+$observacoes = '';
+
+$fisiodiagnostico = '';
+$objetivos_fisio = '';
+
+$indicacao_fisioterapia = '';
+
+$motivo_retificacao = '';
+
+$qtd_muleta ='';
+$qtd_bengala ='';
+	
+} else if($acao == 'A'){
+$id =  $valor2['id'];
+
+$laboratorio =  $valor2['laboratorio'];
+$tempo_diagnostico_doenca = $valor2['tempo_diagnostico_doenca'];
+$hipotese_diagnostica = $valor2['hipotese_diagnostica'];
+$cv = $valor2['cv'];
+$cd4 = $valor2['cd4'];
+$dt_ultimo_exame = $valor2['dt_ultimo_exame'];
+$Tb_ocupacao_principal = $valor2['Tb_ocupacao_principal'];
+
+
+
+$performance_status = $valor2['performance_status'];
+$dispositivo_auxiliar = $valor2['dispositivo_auxiliar'];
+
+$estado_mental = $valor2['estado_mental'];
+$dor = $valor2['dor'];
+$local_dor	= $valor2['local_dor'];
+
+$inspecao_edema  = $valor2['inspecao_edema'];	
+$inspecao_Cicatriz  = $valor2['inspecao_Cicatriz'];
+$inspecao_ulcera  = $valor2['inspecao_ulcera'];
+$inspecao_outros  = $valor2['inspecao_outros'];	
+
+$inspecao_caqueixa  = $valor2['inspecao_caqueixa'];	
+$inspecao_contraturas  = $valor2['inspecao_contraturas'];	
+$inspecao_deformidade  = $valor2['inspecao_deformidade'];	
+$inspecao_atrofia  = $valor2['inspecao_atrofia'];	
+$musculo_outro = $valor2['musculo_outro'];
+$especifique_musculo_outro  = $valor2['especifique_musculo_outro'];
+
+$abducao_ombro_direito  = $valor2['abducao_ombro_direito'];	
+$abducao_ombro_esquerdo  = $valor2['abducao_ombro_esquerdo'];
+$flexao_cotovelo_direito  = $valor2['flexao_cotovelo_direito'];
+$flexao_cotovelo_esquerdo  = $valor2['flexao_cotovelo_esquerdo'];
+$extensao_punho_direito  = $valor2['extensao_punho_direito'];
+$extensao_punho_esquerdo  = $valor2['extensao_punho_esquerdo'];
+$flexao_quadril_direito  = $valor2['flexao_quadril_direito'];
+$flexao_quadril_esquerdo  = $valor2['flexao_quadril_esquerdo'];
+$extensao_joelho_direito  = $valor2['extensao_joelho_direito'];
+$extensao_joelho_esquerdo  = $valor2['extensao_joelho_esquerdo'];
+$dorsiplexao_direito  = $valor2['dorsiplexao_direito'];
+$dorsiplexao_esquerdo  = $valor2['dorsiplexao_esquerdo'];
+
+
+$necessita_avaliacao  = $valor2['necessita_avaliacao'];
+
+if($necessita_avaliacao == 'S'){ 
+
+	$local_sensibilidade  = $valor2['local_sensibilidade'];
+
+	$bicipal_esquerdo = $valor2['bicipal_esquerdo'];
+	$bicipal_direito = $valor2['bicipal_direito'];
+	$tricipital_esquerdo = $valor2['tricipital_esquerdo'];
+	$tricipital_direito = $valor2['tricipital_direito'];
+	$patelar_esquerdo = $valor2['patelar_esquerdo'];
+	$patelar_direito = $valor2['patelar_direito'];
+	$aquileu_esquerdo = $valor2['aquileu_esquerdo'];
+	$aquileu_direito = $valor2['aquileu_direito'];
+
+	$sinal_babinski_esquerdo = $valor2['sinal_babinski_esquerdo'];
+	$rfl_super_esquerdo  = $valor2['rfl_super_esquerdo'];
+	$sinal_babinski_direito = $valor2['sinal_babinski_direito'];
+	$rfl_super_direito  = $valor2['rfl_super_direito'];
+
+	$clonus_esquerdo = $valor2['clonus_esquerdo'];
+	$clonus_direito = $valor2['clonus_direito'];
+
+	$tonus_esquerdo = $valor2['tonus_esquerdo'];
+	$local_tonus_esquerdo  = $valor2['local_tonus_esquerdo'];
+	$tonus_direito = $valor2['tonus_direito'];
+	$local_tonus_direito  = $valor2['local_tonus_direito'];
+
+	$coordenacao  = $valor2['coordenacao'];
+	$obs_avlMuscular  = $valor2['obs_avlMuscular'];
+}else{
+	
+	$local_sensibilidade  = '';
+
+	$bicipal_esquerdo = '';
+	$bicipal_direito = '';
+	$tricipital_esquerdo = '';
+	$tricipital_direito = '';
+	$patelar_esquerdo = '';
+	$patelar_direito = '';
+	$aquileu_esquerdo = '';
+	$aquileu_direito = '';
+
+	$sinal_babinski_esquerdo = '';
+	$rfl_super_esquerdo  = '';
+	$sinal_babinski_direito = '';
+	$rfl_super_direito  = '';
+
+	$clonus_esquerdo = '';
+	$clonus_direito = '';
+
+	$tonus_esquerdo = '';
+	$local_tonus_esquerdo  = '';
+	$tonus_direito = '';
+	$local_tonus_direito  = '';
+
+
+	$coordenacao  = '';
+	$obs_avlMuscular  = '';
+
+}
+
+$frc_cardiaca  = $valor2['frc_cardiaca'];
+$respiracao  = $valor2['respiracao'];
+$pa  = $valor2['pa'];
+$SaO2AA  = $valor2['SaO2AA'];
+$SaO202  = $valor2['SaO202'];
+
+$disp_durante_exer  = $valor2['disp_durante_exer'];
+$falta_ar_andando_apress  = $valor2['falta_ar_andando_apress'];
+$anda_devagar_p_resp  = $valor2['anda_devagar_p_resp'];
+$para_resp_dps_andar  = $valor2['para_resp_dps_andar'];
+$falta_ar_precisa_ajuda  = $valor2['falta_ar_precisa_ajuda'];
+
+$sensacao_dispneia  = $valor2['sensacao_dispneia'];
+
+$via_aerea_sem  = $valor2['via_aerea_sem'];
+$via_aerea_tot  = $valor2['via_aerea_tot'];
+$via_aerea_tqt  = $valor2['via_aerea_tqt'];
+
+$tosse_eficaz  = $valor2['tosse_eficaz'];
+$tosse_ineficaz  = $valor2['tosse_ineficaz'];
+$tosse_necessita_aspiracao  = $valor2['tosse_necessita_aspiracao'];
+
+$ausculta_pulmonar  = $valor2['ausculta_pulmonar'];
+
+$exames_complementares  = $valor2['exames_complementares'];
+
+$observacoes  = $valor2['observacoes'];
+
+$fisiodiagnostico  = $valor2['fisiodiagnostico'];
+$objetivos_fisio  = $valor2['objetivos_fisio'];
+
+$indicacao_fisioterapia  = $valor2['indicacao_fisioterapia'];
+
+$qtd_muleta = $valor2['qtd_muleta'];
+$qtd_bengala = $valor2['qtd_bengala'];
+
+$motivo_retificacao  = $valor2['motivo_retificacao'];
+
+$finalizado = $valor2['finalizado'];
+
+}
+?>
+<style>
+#titulo_dados{
+	font: 8pt;
+	font-weight: bold;
+}
+
+table#table_dados{
+	border-collapse: collapse;
+
+}
+
+
+table#table_dados td {
+    border: 1px solid black;
+	
+}
+
+
+</style>
+<div id="container" style="margin-top: -10px">
+<form id="formAvFisioterapeutica" name="formAvFisioterapeutica"method="post" action="insere_Ficha_de_Avaliacao_FISIOTERAPEUTICA.php"    >
+<input type="hidden" id="id" name="id" value="<?php echo $id;?>">
+<input type="hidden" id="codInternacao" name="codInternacao" value="<?php echo $codInternacao;?>">
+<input type="hidden" id="codPessoa" name="codPessoa" value="<?php echo $codPessoa;?>">
+<input type="hidden" id="codFunc" name="codFunc" value="<?php echo $codFunc;?>">
+<input type="hidden" id="codEspec" name="codEspec" value="<?php echo $codEspec;?>">
+<input type="hidden" id="codPaci" name="codPaci" value="<?php echo $codPaci;?>">
+<input type="hidden" id="id_leito" name="id_leito" value="<?php echo $id_leito;?>">
+<input type="hidden" id="cod_leito" name="cod_leito" value="<?php echo $leito;?>">
+<input type="hidden" id="acao" name="acao" value="<?php echo $acao;?>">
+<input type="hidden" id="finalizado" name="finalizado" value="<?php echo $finalizado;?>">
+<input type='hidden' id='altura' name='altura' value="<?php echo $altura;?>" />
+<input type='hidden' id='peso' name='peso' value="<?php echo $peso;?>" />
+<input type='hidden' id='pulso' name='pulso' value="<?php echo $pulso;?>" /> 
+<input type='hidden' id='temperatura' name='temperatura' value="<?php echo $temperatura;?>" /> 
+<input type='hidden' id='picc' name='picc' value="" />
+<input type='hidden' id='pvc' name='pvc' value="" />
+<input type='hidden' id='sat' name='sat' value="" /> 
+<!--<input type='hidden' id='dor' name='dor' value="" /> -->
+<input type='hidden' id='hora' name='hora' value="" /> 
+<input type='hidden' id='mg' name='mg' value="" /> 
+<input type='hidden' id='ead' name='ead' value="" /> 
+<input type='hidden' id='hora' name='hora' value="" /> 
+<input type='hidden' id='obs' name='obs' value="" /> 
+<input type='hidden' id='origem' name='origem' value="Formulario" /> 
+<input type="hidden" id="div_item" name="div_item" value="">
+<input type="hidden" id="retificado" name="retificado" value="">
+<fieldset style="height:90%" id="formularios"><legend><b>Ficha de Avaliação Fisioterapêutica</b> </legend>
+
+<table id="formularios"  cellpadding="3">
+<tr><td>Histórico</td></tr>
+<?php
+
+  $listaRetificacoesAvFisioterapeutica = new Conn(); //instância do banco
+  $listaRetificacoesAvFisioterapeutica->setSQL("select CONVERT(char(16),datacadastro, 103) as datacadastro,CONVERT(char(5),datacadastro, 108) as horacadastro,ficha_av_fisioterapeutica_id,id   from  formularios.dbo.tb_ficha_avaliacao_fisioterapeutica where internacao_id = ".$codInternacao."  order by id desc");
+
+while ($valorRetificacoes = mssql_fetch_array($listaRetificacoesAvFisioterapeutica->getObjQuery())):
+?>
+					<tr>
+                        <td><a style="cursor:hand" onclick="javascript:window.open('../impressao_Ficha_de_Avaliacao_FISIOTERAPEUTICA.php?codPessoa=<?=$codPessoa;?>&codPaci=<?=$codPaci;?>&origem=<?=$origem;?>&codInternacao=<?=$codInternacao;?>&codFunc=<?=$codFunc;?>&id=<?=$valorRetificacoes['id'];?>&ficha_av_fisioterapeutica_id=<?=$valorRetificacoes['ficha_av_fisioterapeutica_id'];?>','FORMULARIO','top=0,left=0,width=1015,height=650,fullscreen=0,toolbar=0,location=0,status=1,scrollbars=1');"      /><?=$valorRetificacoes['datacadastro']." ".$valorRetificacoes['horacadastro'];?>   <?php if($valorRetificacoes['ficha_av_fisioterapeutica_id'] !=""){ echo "- <font color='red'>Retificação</font>";  }else{ echo "- <font color='red'>Original</font>";  }?> </a></td>
+                     </tr>
+	<?php endwhile; ?>
+</table>
+
+
+	<fieldset id="formularios"  class="linha_padrao_1">
+		<legend id="formularios">Identificação e Dados Demográficos</legend>
+		<table id="formularios" cellpadding="4">
+			<tr>
+				<td><a id="titulo_dados">Nome: </a><?=$paciente;?></td >
+				<td><a id="titulo_dados">Registro: </a><?=$prontuario; ?></td>
+				<td><a id="titulo_dados">Idade: </a><?=$idade.' anos';?></td>
+			</tr>
+			<tr>
+				<td><a id="titulo_dados">Data de nascimento: </a><?=$dataNasc;?></td>
+				<td><a id="titulo_dados">Sexo: </a><?=$sexo;?></td>
+				<td><a id="titulo_dados">Laboratório: </a><input type="text" id="laboratorio" name="laboratorio"  value="<?=$laboratorio;?>"   /> </td>
+			</tr>	
+		</table>
+		<table id="formularios" cellpadding="4">
+			
+			<tr>
+				<td><a id="titulo_dados">Tempo de diagnóstico da doença: </a> <input type="text" id="tempo_diagnostico_doenca" name="tempo_diagnostico_doenca"  value="<?=$tempo_diagnostico_doenca;?>"   /></td>
+				<td><a id="titulo_dados">Diagnósticos/Hipóteses: </a><input type="text" id="hipotese_diagnostica" name="hipotese_diagnostica"  value="<?=$hipotese_diagnostica;?>"   /></td>
+				<!--<td><a id="titulo_dados">Data da Internação: </a><?//=$dt_inter;?></td>
+				<td><a id="titulo_dados">Data de Avaliação: </a><?//=$dt_aval;?></td>-->
+				
+			</tr>
+		</table>
+		<table id="formularios" cellpadding="4">			
+			<tr>
+				<td>CV: <input type="text" id="cv" name="cv"  value="<?=$cv;?>"  /> </td>
+				<td>CD4:<input type="text" id="cd4" name="cd4"  value="<?=$cd4;?>"  /></td>
+				<td style="display:block">Data do último exame:<input type="text" value="<?php echo $dt_ultimo_exame;?>" readonly name="dt_ultimo_exame" size="11" maxlength="10"><input type="button" value="..." onclick="displayCalendar(document.all.dt_ultimo_exame,'dd/mm/yyyy',this)"></td>					
+
+		</table>
+	</fieldset>
+	
+<fieldset><legend onclick="javascript:AbreItens('item1');" style="cursor:hand"><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;HISTÓRIA:</legend>
+&nbsp;
+			<div id="item1" style="display: none;">	
+			<table style="font-size: 8pt;">
+				<tr> <td style="font-weight: bold;"> Trabalho / Ocupação principal:
+					 <input type="text" size="110" id="Tb_ocupacao_principal" name="Tb_ocupacao_principal" value="<?php echo $Tb_ocupacao_principal;?>"/>
+				</td>
+			
+				<tr>
+				<tr><td style="font-weight: bold;">Estado geral de saúde prévio (ECOG - Performance Status):
+						<select style="width:40px" id="performance_status" name="performance_status"  style="width:50px">
+							<option value="0"    <?php if($performance_status =='0'    ||  $performance_status =='' ) {?> selected="selected"   <?php }?> >0</option>
+							<option value="1"    <?php if($performance_status =='1') {?> selected="selected"   <?php }?> >1</option>
+							<option value="2"    <?php if($performance_status =='2') {?> selected="selected"   <?php }?> >2</option>
+							<option value="3"    <?php if($performance_status =='3') {?> selected="selected"   <?php }?> >3</option>
+							<option value="4"    <?php if($performance_status =='4') {?> selected="selected"   <?php }?> >4</option>
+						</select>
+							
+					</td>
+				</tr>
+				<tr><td style="font-weight: bold;">Uso de dispositivo assistivo:</td></tr>
+				<tr>
+					<td>
+						<input id="dispositivo_auxiliar_N"  name="dispositivo_auxiliar"   type="radio" value="N"  onClick="javascript:checar();" <?php if($dispositivo_auxiliar =='N' ||  $dispositivo_auxiliar =='' ) {?> checked="checked"   <?php }?>  />Não&nbsp;&nbsp;
+						<input id="dispositivo_auxiliar_MB1"  name="dispositivo_auxiliar"   type="radio" value="MB1"  onClick="javascript:checar();" <?php if($dispositivo_auxiliar =='MB1'  ) {?> checked="checked"   <?php }?>  />Muleta(1/2)  
+						<select style="width:40px; <?php if($dispositivo_auxiliar!='MB1'){?> display:none;"  <?php }?>  id="qtd_muleta" name="qtd_muleta" >
+						  <option value="0"  <?php if($qtd_muleta =='0'    ||  $qtd_muleta =='' ) {?> selected="selected"   <?php }?> >0</option>
+						  <option value="1" <?php if($qtd_muleta =='1') {?> selected="selected"   <?php }?> > 1</option>
+						  <option value="2" <?php if($qtd_muleta =='2') {?> selected="selected"   <?php }?> > 2</option>
+						</select>&nbsp;&nbsp;
+						<input id="dispositivo_auxiliar_MB2"  name="dispositivo_auxiliar"   type="radio" value="MB2" onClick="javascript:checar();" <?php if($dispositivo_auxiliar =='MB2'  ) {?> checked="checked"   <?php }?>  />Bengala(1/2)  
+						<select style="width:40px; <?php if($dispositivo_auxiliar!='MB2'){?> display:none;"  <?php }?>  id="qtd_bengala" name="qtd_bengala" >
+						   <option value="0"  <?php if($qtd_bengala =='0'    ||  $qtd_bengala =='' ) {?> selected="selected"   <?php }?> >0</option>
+						  <option value="1" <?php if($qtd_bengala =='1') {?> selected="selected"   <?php }?> > 1</option>
+						  <option value="2" <?php if($qtd_bengala =='2') {?> selected="selected"   <?php }?> > 2</option>
+						</select>&nbsp;&nbsp;
+						<input id="dispositivo_auxiliar_A"  name="dispositivo_auxiliar"   type="radio" value="A" onClick="javascript:checar();" <?php if($dispositivo_auxiliar =='A'  ) {?> checked="checked"   <?php }?>  /> Andador  &nbsp;&nbsp;
+					<input id="dispositivo_auxiliar_CD"  name="dispositivo_auxiliar"   type="radio" value="CD" onClick="javascript:checar();" <?php if($dispositivo_auxiliar =='CD'  ) {?> checked="checked"   <?php }?>   />	Cadeira de rodas    &nbsp;&nbsp;
+					</td>
+				</tr>	
+				
+			</table>
+			</div>
+	</fieldset> 				
+
+	<fieldset><legend onclick="javascript:AbreItens('item2');Calcular();"  style="cursor:hand"><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;Exame Físico</legend>
+	&nbsp;
+			<div id="item2" style="display: none">
+			
+			
+			<table style="font-size: 8pt;">
+				<tr><td style="font-weight: bold;">Estado Mental</td></tr>
+				<tr>
+					<td>
+						<input id="estado_mental_alerta"  name="estado_mental"   type="radio" value="al"   <?php if($estado_mental =="al"){ ?>  checked="checked" <?php }?>  />Alerta  &nbsp;&nbsp;
+						<input id="estado_mental_letargico" name="estado_mental" type="radio" value="le"   <?php if($estado_mental =="le"){ ?>  checked="checked" <?php }?>     >Letárgico &nbsp;&nbsp;
+						<input id="estado_mental_confuso" name="estado_mental" type="radio"  value="co"   <?php if($estado_mental =="co"){ ?>  checked="checked" <?php }?>       / >Confuso &nbsp;&nbsp;
+						<input id="estado_mental_torporoso" name="estado_mental" type="radio"  value="to"   <?php if($estado_mental =="to"){ ?>  checked="checked" <?php }?> />Torporoso &nbsp;&nbsp;
+						 <input id="estado_mental_comatoso_sedado" name="estado_mental" type="radio"  value="vs"   <?php if($estado_mental =="cs"){ ?>  checked="checked" <?php }?> />Comatoso / sedado &nbsp;&nbsp;
+					</td>
+				</tr>		
+			</table>
+			<table id="formularios" cellpadding="4">
+			    <tr><td style="font-weight: bold;">Dor(Escala Visual Analógica): 
+					<select style="width:90px" id="dor"  name="dor" onchange="if(this.value=='0'){document.getElementById('div_dor').style.display = 'none';}else{document.getElementById('div_dor').style.display = 'block';}">
+						<? 
+						$opcao = 0; 
+						while ($opcao<=10){ 
+						?>	
+						<option value="<?=$opcao;?>"  <?php if($dor == $opcao){ ?> selected="selected" <?php } ?>  ><?=$opcao;?></option>
+						<? $opcao++; } ?>
+						<option value="11"  <?php if($dor == 11){ ?> selected="selected" <?php } ?>  >Não Avaliado</option>
+						</select>
+					</td>
+					<td>
+					
+						<div name="div_dor" id="div_dor"  <?php if($dor=='0'){?> style="display:none"  <?php }?>  > Local:<input type="text" size="77" id="local_dor"name="local_dor" value="<?=$local_dor;?>"></div>
+					</td>
+				</tr>
+				</table>
+<?php 			
+
+
+?>  			
+				<table style="font-size: 8pt;">
+						
+				<tr><td style="font-weight: bold;">Sistema Tegumentar:</td></tr>
+				<tr>
+					<td>
+						<input type="checkbox" id="inspecao_edema" name="inspecao_edema"  value="s"
+						<?php if ($inspecao_edema == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Edema&nbsp;&nbsp; 
+					
+						<input type="checkbox" id="inspecao_Cicatriz" name="inspecao_Cicatriz"  value="s"
+						<?php if ($inspecao_Cicatriz == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Cicatriz&nbsp;&nbsp; 
+					
+						<input type="checkbox" id="inspecao_ulcera" name="inspecao_ulcera"  value="s"
+						<?php if ($inspecao_ulcera == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Úlcera por pressão&nbsp;&nbsp; 
+					
+						<input type="checkbox" id="inspecao_outros" name="inspecao_outros"  value="s"
+						<?php if ($inspecao_outros == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Outro&nbsp;&nbsp; 
+					</td>
+					</tr>
+				<tr><td style="font-weight: bold;">Sistema Musculoesquelético:</td></tr>
+				<tr>
+					<td>
+						<input type="checkbox" id="inspecao_caqueixa"   name="inspecao_caqueixa" value="s"
+						<?php if ($inspecao_caqueixa == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Caqueixa&nbsp;&nbsp;
+						<input type="checkbox" id="inspecao_contraturas" name="inspecao_contraturas"  value="s"
+						<?php if ($inspecao_contraturas == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Contraturas&nbsp;&nbsp;
+						<input type="checkbox" id="inspecao_deformidade" name="inspecao_deformidade"  value="s"
+						<?php if ($inspecao_deformidade == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Deformidade&nbsp;&nbsp;
+						<input type="checkbox" id="inspecao_atrofia" name="inspecao_atrofia" value="s"
+						<?php if ($inspecao_atrofia == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Atrofia&nbsp;&nbsp;
+						<input type="checkbox" id="musculo_outro" name="musculo_outro" value="s" onClick="javascript:checar();"
+						<?php if ($musculo_outro == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Outro
+						<br>
+						<div id="especifique_musculo" <?php if($musculo_outro == "s"){ ?> style="display:block" <?php }else{?>  style="display:none"    <?php }?>  >
+						Especifique: <input type="text" size="110" id="especifique_musculo_outro" name="especifique_musculo_outro" value="<?php echo $especifique_musculo_outro;?>"/>
+						</div>
+					</td>
+				</tr>
+				<tr><td>
+					<table style="font-size: 8pt;" >	
+				
+				<tr><td style="font-weight: bold;">Força Muscular(MRC)</td></tr>
+				<tr><td><br>
+				<table  id="table_dados" style="font-size: 8pt;">
+					<tr style="text-align:center">
+						<td  style="font-weight: bold;">Grupos Musculares</td><td  style="font-weight: bold; width:80px" >Direito&nbsp;&nbsp;</td><td  style="font-weight: bold; width:80px">Esquerdo</td>
+					</tr>
+				<tr><td>MMSS:Abdutores de Ombro </td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="abducao_ombro_direito" name="abducao_ombro_direito" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($abducao_ombro_direito==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"   <?php if($abducao_ombro_direito==$opcao){ echo "selected='selected'";} ?> ><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="abducao_ombro_esquerdo" name="abducao_ombro_esquerdo" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($abducao_ombro_esquerdo==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($abducao_ombro_esquerdo==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+				</tr>
+				<tr><td>MMSS:Flexores de Cotovelo </td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="flexao_cotovelo_direito" name="flexao_cotovelo_direito" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($flexao_cotovelo_direito==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"     <?php if($flexao_cotovelo_direito==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="flexao_cotovelo_esquerdo" name="flexao_cotovelo_esquerdo" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($flexao_cotovelo_esquerdo==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($flexao_cotovelo_esquerdo==$opcao){ echo "selected='selected'";} ?>    ><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+				</tr>
+				
+				<tr><td>MMSS:Extensores de Punho </td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="extensao_punho_direito" name="extensao_punho_direito" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($extensao_punho_direito==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($extensao_punho_direito==$opcao){ echo "selected='selected'";} ?>   ><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="extensao_punho_esquerdo" name="extensao_punho_esquerdo" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($extensao_punho_esquerdo==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"  <?php if($extensao_punho_esquerdo==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+				</tr>
+				<tr><td>MMII:Flexores de Quadril </td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="flexao_quadril_direito" name="flexao_quadril_direito" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($flexao_quadril_direito==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($flexao_quadril_direito==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="flexao_quadril_esquerdo" name="flexao_quadril_esquerdo" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($flexao_quadril_esquerdo==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($flexao_quadril_esquerdo==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+				</tr>
+				
+				<tr><td>MMII:Extensores de Joelho </td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="extensao_joelho_direito" name="extensao_joelho_direito" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($extensao_joelho_direito==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"     <?php if($extensao_joelho_direito==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="extensao_joelho_esquerdo" name="extensao_joelho_esquerdo" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($extensao_joelho_esquerdo==$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($extensao_joelho_esquerdo==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+				</tr>
+				<tr><td>MMII:Dorsiflexores </td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="dorsiplexao_direito" name="dorsiplexao_direito" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($dorsiplexao_direito===$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($dorsiplexao_direito==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+					<td  style="text-align:center">
+						<select style="width:50px" id="dorsiplexao_esquerdo" name="dorsiplexao_esquerdo" onClick="javascript:Calcular();">
+						<option value="-1" <?php if($siplexao_esquerdo===$opcao){ echo "selected='selected'";} ?> >N/A </option>
+							<?  $opcao = 0; while ($opcao<=5){ ?><option value="<?=$opcao;?>"    <?php if($dorsiplexao_esquerdo==$opcao){ echo "selected='selected'";} ?>><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+					</td>
+				</tr>
+						 
+				<tr><td>SUBTOTAL: </td>
+					<td style="text-align:center">
+						<input type="text"  name="subTotal_d" id="subTotal_d" style="text-align:center" value="<?php echo $subTotal_d;?>" size="5" >
+					</td>
+					<td style="text-align:center">
+						<input type="text"  name="subTotal_e" id="subTotal_e"  style="text-align:center" value="<?php echo $subTotal_e;?>" size="5" >
+					</td>
+				</tr>
+				
+				<tr><td>TOTAL: </td>
+					<td colspan="2" style="text-align:center">
+						<input type="text"  name="Total_grp_muscular" id="Total_grp_muscular"  style="text-align:center" value="<?php echo $Total_grp_muscular;?>" size="5" >
+					</td>
+				
+				</td>				
+				</tr>
+				
+				</table>
+				
+				</tr></br>
+				
+				<table style="font-size: 8pt;" >
+				<tr><td><fieldset style="border: 1px solid #A9A9A9;" ><legend><b>Sistema Neuromuscular</b></legend>
+				<table style="font-size: 8pt;" >
+				<tr>	
+				<td>
+				<input type="radio" id="necessita_avaliacao_S"  name="necessita_avaliacao" value="S" <?php if($necessita_avaliacao=='S'){ echo "checked='checked'";} ?> onload="javascript:checar();"  onclick="javascript:checar();"  > Necessita de avaliação &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="necessita_avaliacao_N"  value="N" name="necessita_avaliacao" <?php if($necessita_avaliacao=='N'){ echo "checked='checked'";} ?> onload="javascript:checar();"  onclick="javascript:checar();"    />NÃO Necessita de avaliação   
+				<br>
+				</td>
+				<br>
+				</tr>
+				<tr>
+				<td><div id="avg_neurologica" style="<?php if($necessita_avaliacao=='S'){?> display:block <? } else {?> display:none <?}?>">
+					<table id="formularios" cellpadding="4">
+					<tr><td style="font-weight: bold;">Sensibilidade</td></tr>
+					<tr>
+						<td><textarea style="width:750px;height:50px;display:block" id="local_sensibilidade" name="local_sensibilidade" ><?php echo $local_sensibilidade;?></textarea></td>
+					</tr>
+					</table>
+				
+				<br/>
+				<table style="font-size: 8pt;" >
+				<tr><td colspan="3"><b>Reflexos Profundos </b>(Escala de Wexler):</td></tr>
+				<tr>
+				<td ></td>
+				<td><a>Esquerdo</a></td>
+				<td><a>Direito</a></td>
+
+					
+				</tr>
+				<tr><td>Bicipital: </td>
+				<td>
+						<select style="width:120px"  id="bicipal_esquerdo"  name="bicipal_esquerdo"  >
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"    <?php if($bicipal_esquerdo == $opcao){?> selected="selected" <?php } ?>       ><?=$opcao;?></option><? $opcao++; } ?>
+							<option value="5"    <?php if($bicipal_esquerdo == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+				</td>
+				<td>
+						<select style="width:120px" id="bicipal_direito"  name="bicipal_direito">
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($bicipal_direito == $opcao){?> selected="selected" <?php } ?>  ><?=$opcao;?></option><? $opcao++; } ?>
+							<option value="5"    <?php if($bicipal_direito == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					</td></tr>
+				<tr><td>Tricipital:</td>
+					<td>
+						<select style="width:120px" id="tricipital_esquerdo"  name="tricipital_esquerdo">
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($tricipital_esquerdo == $opcao){?> selected="selected" <?php } ?> ><?=$opcao;?></option><? $opcao++; } ?>
+							<option value="5"    <?php if($tricipital_esquerdo == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					</td>
+					<td>
+						<select style="width:120px" id="tricipital_direito"    name="tricipital_direito">
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($tricipital_direito == $opcao){?> selected="selected" <?php } ?>><?=$opcao;?></option><? $opcao++; } ?>
+							<option value="5"    <?php if($tricipital_direito == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					
+				</td></tr>
+				<tr><td>Patelar:</td>
+					<td>
+						<select style="width:120px" id="patelar_esquerdo"  name="patelar_esquerdo" >
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($patelar_esquerdo == $opcao){?> selected="selected" <?php } ?>><?=$opcao;?></option><? $opcao++; } ?>
+								<option value="5"    <?php if($patelar_esquerdo == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					</td>
+					<td>	
+						<select style="width:120px" id="patelar_direito" name="patelar_direito">
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($patelar_direito == $opcao){?> selected="selected" <?php } ?>><?=$opcao;?></option><? $opcao++; } ?>
+								<option value="5"    <?php if($patelar_direito == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					</td></tr>
+				<tr><td>Aquileu:</td><td>
+						<select style="width:120px" id="aquileu_esquerdo" name="aquileu_esquerdo">
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($aquileu_esquerdo == $opcao){?> selected="selected" <?php } ?>><?=$opcao;?></option><? $opcao++; } ?>
+								<option value="5"    <?php if($aquileu_esquerdo == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					</td>
+					<td>	
+						<select style="width:120px" id="aquileu_direito" name="aquileu_direito"    >
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>" <?php if($aquileu_direito == $opcao){?> selected="selected" <?php } ?> ><?=$opcao;?></option><? $opcao++; } ?>
+								<option value="5"    <?php if($aquileu_direito == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>
+					</td></tr>
+				<tr><td></td></tr>
+				
+				</table>
+				
+				</br>
+				
+				
+<table style="font-size: 8pt;" >					
+				
+				<tr>
+					<td style="font-weight: bold;">Reflexos Superficiais:</td>
+				</tr>
+				<tr><td>
+					<a>Esquerdo:</a>
+					</td>
+					<td>
+						<a>
+							<input type="radio" name="sinal_babinski_esquerdo" id="sinal_babinski_esquerdo_presente" value="p"
+							<?php if($sinal_babinski_esquerdo == 'p'){?>
+							checked="checked"
+							<? } ?>
+							>Presente&nbsp;&nbsp;
+							<input type="radio" name="sinal_babinski_esquerdo" id="sinal_babinski_esquerdo_ausente" value="a"
+							<?php if($sinal_babinski_esquerdo == 'a'){?>
+							checked="checked"
+							<? } ?>
+							>Ausente
+
+							<input type="radio" name="sinal_babinski_esquerdo" id="sinal_babinski_esquerdo_indiferente" value="i"
+							<?php if($sinal_babinski_esquerdo == 'i'){?>
+							checked="checked"
+							<? } ?>
+							>Indiferente &nbsp;&nbsp; Qual(is)? <input type="text" id="rfl_super_esquerdo" name="rfl_super_esquerdo" size="50" value="<?php echo $rfl_super_esquerdo;?>"/>
+							
+						</a>
+						
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a>Direito</a>
+					</td>
+					<td>
+						<a>
+							<input type="radio" name="sinal_babinski_direito" id="sinal_babinski_direito_presente" value="p"
+							<?php if($sinal_babinski_direito == 'p'){?>
+							checked="checked"
+							<? } ?>
+							>Presente&nbsp;&nbsp;
+							<input type="radio" name="sinal_babinski_direito" id="sinal_babinski_direito_ausente" value="a"
+							<?php if($sinal_babinski_direito == 'a'){?>
+							checked="checked"
+							<? } ?>
+							>Ausente
+							<input type="radio" name="sinal_babinski_direito" id="sinal_babinski_direito_indiferente" value="i"
+							<?php if($sinal_babinski_direito == 'i'){?>
+							checked="checked"
+							<? } ?>
+							>Indiferente &nbsp;&nbsp; Qual(is)? <input type="text" id="rfl_super_direito" name="rfl_super_direito" size="50" value="<?php echo $rfl_super_direito;?>"/>
+													
+						</a>
+						
+					</td>
+				</tr>
+				</table>
+			
+				
+				<br/>
+				<table style="font-size: 8pt;" >					
+				
+				<tr>
+					<td style="font-weight: bold;">Clônus</td>
+				</tr>
+				<tr><td>
+					<a>Esquerdo:</a>
+					</td>
+					<td>
+						<a>
+							<input type="radio" name="clonus_esquerdo" id="clonus_esquerdo_presente" value="p"
+							<?php if($clonus_esquerdo == 'p'){?>
+							checked="checked"
+							<? } ?>
+							>Presente&nbsp;&nbsp;
+							<input type="radio" name="clonus_esquerdo" id="clonus_esquerdo_ausente" value="a"
+							<?php if($clonus_esquerdo == 'a'){?>
+							checked="checked"
+							<? } ?>
+							>Ausente
+						</a>
+				</tr>
+				<tr>
+					<td>
+						<a>Direito</a>
+					</td>
+					<td>
+						<a>
+							<input type="radio" name="clonus_direito" id="clonus_direito_presente" value="p"
+							<?php if($clonus_direito == 'p'){?>
+							checked="checked"
+							<? } ?>
+							>Presente&nbsp;&nbsp;
+							<input type="radio" name="clonus_direito" id="clonus_direito_ausente" value="a"
+							<?php if($clonus_direito == 'a'){?>
+							checked="checked"
+							<? } ?>
+							>Ausente
+						</a>
+					</td>
+				</tr>
+				</table>
+				
+				<br/>
+				<table style="font-size: 8pt;" >				
+				
+				<tr><td colspan="3"><b>Tônus Muscular</b>(Escala Modificada de Ashworth):</td></tr>
+				<tr>
+					<td>Esquerdo: </td>
+					<td>
+						<select style="width:120px" id="tonus_esquerdo" name="tonus_esquerdo"    >
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($tonus_esquerdo == $opcao){?> selected="selected" <?php } ?>><?=$opcao;?></option>
+							<? 	if ($opcao == 1) { ?>
+								
+								<option value="6"    <?php if($tonus_esquerdo == 6){?> selected="selected" <?php } ?>>1+</option>
+							
+							<? } ?>
+							
+							<? $opcao++; } ?>
+							<option value="5"    <?php if($tonus_esquerdo == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>&nbsp;&nbsp;
+					</td>
+					<td>
+						Local: <input type="text" id="local_tonus_esquerdo" name="local_tonus_esquerdo" size="90" value="<?php echo $local_tonus_esquerdo;?>"/>
+					</td>					
+				</tr>
+				<tr>
+					<td>Direito: </td>
+					<td>
+						<select style="width:120px" id="tonus_direito"  name="tonus_direito"  >
+							<?  $opcao = 0; while ($opcao<=4){ ?><option value="<?=$opcao;?>"  <?php if($tonus_direito == $opcao){?> selected="selected" <?php } ?>><?=$opcao;?></option>
+							<? 	if ($opcao == 1) { ?>
+								
+								<option value="6"    <?php if($tonus_direito == 6){?> selected="selected" <?php } ?>>1+</option>
+							
+							<? } ?>							
+							
+							<? $opcao++; } ?>
+							<option value="5"    <?php if($tonus_direito == 5){?> selected="selected" <?php } ?>>Não Avaliado</option>
+						</select>&nbsp;&nbsp;
+					</td>
+<td>
+						Local: <input type="text" id="local_tonus_direito" name="local_tonus_direito"  size="90"  value="<?php echo $local_tonus_direito;?>"/>
+					</td>						
+				</tr>
+			</table>
+				<br/>
+				<table id="formularios" cellpadding="4">
+					<tr><td style="font-weight: bold;">Coordenação</td></tr>
+					<tr>
+						<td><textarea style="width:750px;height:50px;display:block" id="coordenacao" name="coordenacao" > <?=$coordenacao;?></textarea></td>
+					</tr>
+					</table>
+				<br/>
+				<table id="formularios" cellpadding="4">
+					<tr><td style="font-weight: bold;">Observações</td></tr>
+					<tr>
+						<td><textarea style="width:750px;height:50px;display:block" id="obs_avlMuscular" name="obs_avlMuscular" ><?=$obs_avlMuscular;?> </textarea></td>
+					</tr>
+					</table>
+				</div></td>
+				</tr>
+			</table>
+				</fieldset> </td></tr>
+			</table>
+					
+			<fieldset style="border: 1px solid #A9A9A9;" ><legend><b>Sistema Cardiorrespiratório</b></legend>
+			<table style="font-size: 8pt;" >
+			<br>	
+			<tr><td style="font-weight: bold;">Sinais Vitais</td></tr>
+				<tr>
+					<td>
+						FC: <input id="frc_cardiaca"  name="frc_cardiaca" type="text" size="4" value="<?=$valor2["frc_cardiaca"];?>">bpm&nbsp;&nbsp;
+						FR: <input id="respiracao"  name="respiracao" type="text" size="4" value="<?=$valor2["respiracao"];?>">irpm&nbsp;&nbsp;
+						PA: <input id="pa"  name="pa" type="text" size="8" value="<?=$valor2["pa"];?>">mmHg&nbsp;&nbsp;
+						SaO2:<input id="SaO2AA"  name="SaO2AA"  type="text" size="4"  value="<?php echo $SaO2AA;?>">%(AA)&nbsp;&nbsp;
+						SaO2:<input id="SaO202"  name="SaO202"  type="text" size="4" value="<?php echo $SaO202;?>">%(O2)
+
+
+
+						</td>
+				</tr>
+				<tr><td>&nbsp;</td></tr>
+				
+				<tr><td><b>Dispneia</b> (Escala de Dispneia MRC): </td></tr>
+				<tr><td>&nbsp;</td></tr>
+				<tr> <td>
+				<input type="checkbox" id="disp_durante_exer"   name="disp_durante_exer" value="s"
+						<?php if ($disp_durante_exer == 's'){?>
+						checked="checked"
+						<? } ?>
+						>0 - Só sofre de falta de ar durante exercícios intensos
+				</td></tr>
+				<tr> <td>
+				<input type="checkbox" id="falta_ar_andando_apress"   name="falta_ar_andando_apress" value="s"
+						<?php if ($falta_ar_andando_apress == 's'){?>
+						checked="checked"
+						<? } ?>
+						>1 - Sofre de falta de ar quando andando apressadamente ou subindo uma rampa leve
+				</td></tr>
+				<tr> <td>
+				<input type="checkbox" id="anda_devagar_p_resp"   name="anda_devagar_p_resp" value="s"
+						<?php if ($anda_devagar_p_resp == 's'){?>
+						checked="checked"
+						<? } ?>
+						>2 - Anda mais devagar do que as pessoas da mesma idade por causa da falta de ar ou tem que parar para respirar mesmo quando andando devagar
+				</td></tr>
+				<tr> <td>
+				<input type="checkbox" id="para_resp_dps_andar"   name="para_resp_dps_andar" value="s"
+						<?php if ($para_resp_dps_andar == 's'){?>
+						checked="checked"
+						<? } ?>
+						>3 - Pára para respirar depois de andar menos de 100 metros ou após alguns minutos 
+				</td></tr>
+				<tr> <td>
+				<input type="checkbox" id="falta_ar_precisa_ajuda"   name="falta_ar_precisa_ajuda" value="s"
+						<?php if ($falta_ar_precisa_ajuda == 's'){?>
+						checked="checked"
+						<? } ?>
+						>4 - Sinto falta de ar que não saio de casa, ou preciso de ajuda para me vestir ou tomar banho sozinho
+				</td></tr>
+				
+				<tr><td>&nbsp;</td></tr>
+				<tr><td style="font-weight: bold;">Sensação de Dispnéia (0 - 10): 
+					<select style="width:50px" id="sensacao_dispneia"  name="sensacao_dispneia">
+							<?  $opcao = 0; while ($opcao<=10){ ?><option value="<?=$opcao;?>"  <?php if($sensacao_dispneia == $opcao){?> selected="selected" <?php } ?>  ><?=$opcao;?></option><? $opcao++; } ?>
+						</select>
+				</td></tr>
+				
+				<tr><td>&nbsp;</td></tr>
+				<tr><td style="font-weight: bold;">Via Aérea</td></tr>
+				<tr>
+					<td>
+						<input type="checkbox" id="via_aerea_sem"   name="via_aerea_sem" value="s"
+						<?php if ($via_aerea_sem == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Sem via aérea artificial&nbsp;&nbsp;
+						<input type="checkbox" id="via_aerea_tot" name="via_aerea_tot"  value="s"
+						<?php if ($via_aerea_tot == 's'){?>
+						checked="checked"
+						<? } ?>
+						>TOT&nbsp;&nbsp;
+						<input type="checkbox" id="via_aerea_tqt" name="via_aerea_tqt"  value="s"
+						<?php if ($via_aerea_tqt == 's'){?>
+						checked="checked"
+						<? } ?>
+						>TQT&nbsp;&nbsp;
+						
+						
+					</td>
+					
+				</tr>
+				<tr><td>&nbsp;</td></tr>
+				<tr>
+					<td style="font-weight: bold;">Eficácia de Tosse</td>
+				</tr>
+				<tr>
+									
+					<td>
+						<input type="checkbox" id="tosse_eficaz"   name="tosse_eficaz" value="s"
+						<?php if ($tosse_eficaz == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Eficaz&nbsp;&nbsp;
+						<input type="checkbox" id="tosse_ineficaz" name="tosse_ineficaz"  value="s"
+						<?php if ($tosse_ineficaz == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Pouco eficaz&nbsp;&nbsp;
+						<input type="checkbox" id="tosse_necessita_aspiracao" name="tosse_necessita_aspiracao"  value="s"
+						<?php if ($tosse_necessita_aspiracao == 's'){?>
+						checked="checked"
+						<? } ?>
+						>Ineficaz(Necessita de Aspiração)&nbsp;&nbsp;
+												
+					</td>
+				</tr>
+				
+				<tr><td>&nbsp;</td></tr>
+				<tr><td style="font-weight: bold;">Ausculta Pulmonar: <input type="text" size="90" id="ausculta_pulmonar" name="ausculta_pulmonar" value="<?=$ausculta_pulmonar;?>"></td></tr>
+				<tr><td>&nbsp;</td></tr>
+				
+				</fieldset>	
+				</table>
+		
+				</table>
+				
+			</table>
+			
+			<br/>
+			
+				</table>
+			</div>
+	</fieldset>
+	
+	
+	
+	<fieldset><legend onclick="javascript:AbreItens('item3');"     style="cursor:hand"><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;Exames Complementares</legend>
+			&nbsp;
+			<div id="item3" style="display: none;">
+			<a href="#" onclick="javascript:window.open('/sipec/ceclin/asp/ambulatorio/Relatorios/ConsultasPessoa.asp?logon=<?=$codFunc;?>&CodPessoa=<?=$codPessoa;?>&Source=SINT&Usu=<?=$codFunc;?>&codGrpFunc=<?=$CodGrpFunc;?>&codEspec=<?=$codEspec;?>','HISTORICO_PACIENTE','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no')" ><h5>Visualizar Histórico do Paciente</h5></a>
+			<br/>
+			<br/>
+		
+			<textarea rows="10" cols="80"   id="exames_complementares" name="exames_complementares"      ><?php echo $exames_complementares;?></textarea><br/>
+			</div>
+	</fieldset>
+					
+			<fieldset><legend onclick="javascript:AbreItens('item4');"     style="cursor:hand"><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;Observações</legend>
+			&nbsp;
+			<div id="item4" style="display: none;">
+				<br/>
+				<textarea rows="10" cols="80"   id="observacoes" name="observacoes"      ><?php echo $observacoes;?></textarea>
+				<br/>
+				<br/>
+			</div>
+			</fieldset>
+			
+			<fieldset><legend onclick="javascript:AbreItens('item5');"     style="cursor:hand"><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;Fisiodiagnóstico</legend>
+			&nbsp;
+			<div id="item5" style="display: none;">
+				<br/>
+				<textarea rows="10" cols="80"   id="fisiodiagnostico" name="fisiodiagnostico"      ><?php echo $fisiodiagnostico;?></textarea>
+				<br/>
+				<br/>
+			</div>
+			</fieldset>
+			
+			<fieldset><legend onclick="javascript:AbreItens('item6');"     style="cursor:hand"><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;Objetivos Fisioterapêuticos</legend>
+			&nbsp;
+			<div id="item6" style="display: none;">
+				<br/>
+				<textarea rows="10" cols="80"   id="objetivos_fisio" name="objetivos_fisio"      ><?php echo $objetivos_fisio;?></textarea>
+				<br/>
+				<br/>
+			</div>
+			</fieldset>
+	
+	<fieldset><legend onclick="javascript:AbreItens('item7');" ><img src="../../../img/set_direita.gif" style="display:block;position: absolute" />&nbsp;&nbsp;&nbsp;&nbsp;Indicação de Acompanhamento pela Fisioterapia:</legend>
+			&nbsp;
+			<div id="item7" style="display: none;">
+					<input type="radio" id="indicacao_fisioterapia_S"  name="indicacao_fisioterapia" value="S" <?php if($indicacao_fisioterapia=='S'){ echo "checked='checked'";} ?> />Sim<input type="radio" id="indicacao_fisioterapia_N"   value="N" name="indicacao_fisioterapia"  <?php if($indicacao_fisioterapia=='N'){ echo "checked='checked'";} ?>    />Não
+			</div>
+			&nbsp;
+	
+	<!--<a onclick="javascript:validaForm();">Salvar</a>-->
+	
+</fieldset>
+
+<?php if($finalizado!="S"){ ?>
+<img class="botao"  onclick="javascript:validaForm('incluido');"  onmouseover="src='../../../img/bt_salvarOver.jpg'" onmouseout="src='../../../../img/bt_salvarOut.jpg'" src="../../../../img/bt_salvarOut.jpg" style="border: none; margin-left: 1%; cursor: hand;" />
+
+<img class="botao" onclick="javascript:var sn = confirm ('Tem certeza que finalizar o preenchimento desse formulário?\n Após a finalização não será possível alteração!');
+		if (sn == false){
+			return false;
+		} validaForm('finalizado'); " onmouseover="src='../../../../img/bt_finalizarOver.jpg'" onmouseout="src='../../../../img/bt_finalizarOut.jpg'" src="../../../../img/bt_finalizarOut.jpg" style="border: none; margin-left: 1%; cursor: hand;" />
+<?php }else{ ?>
+
+<fieldset  id="formularios"  class="linha_padrao_2">
+		<legend> Motivo da Retificação</legend>
+		<textarea style="width:750px;height:150px;display:block" id="motivo_retificacao" name="motivo_retificacao" ></textarea>
+	
+	
+	</fieldset>
+
+<img class="botao" name="Retificar" id="Retificar"  onclick="if(document.formAvFisioterapeutica.motivo_retificacao.value==''){alert('Preencher o Movito da Retificação!');return false;}else{document.formAvFisioterapeutica.retificado.value='S';formAvFisioterapeutica.submit();}" onmouseover="src='../../../../img/bt_Retificar_over.jpg'" onmouseout="src='../../../../img/bt_Retificar_out.jpg'" src="../../../../img/bt_Retificar_out.jpg"  style="border: none; cursor: hand;"  >
+
+<?php }?>
+
+<img title="Fechar Tela"  class="botao" onclick="javascript:window.close();" onmouseover="src='../../../../img/bt_fecharOver.jpg'" onmouseout="src='../../../../img/bt_fecharOut.jpg'" src="../../../../img/bt_fecharOut.jpg" style="border: none; margin-bottom: 0px; cursor: hand;" />  
+</form>
+</div>
