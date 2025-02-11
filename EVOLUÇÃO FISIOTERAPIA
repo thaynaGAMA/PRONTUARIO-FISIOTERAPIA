@@ -1,0 +1,1167 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt_BR">
+<head>
+	
+	
+	<style>
+		#titulo_dados{
+			font: 8pt;
+			font-weight: bold;
+		}
+
+		.btn-primary {
+			background-color: #8C4646;
+			border-color: #8C4646
+		}
+
+		.wrapper {
+		
+		  background-color: #f4f6f9;
+		  text-align:left !important;
+		  margin:0!important;
+			width:100%;
+		}
+		
+		.content-wrapper{
+	
+			display:flex;
+			flex-direction:column;
+			align-items:center;
+			margin:0!important;
+			height:auto!important;
+		}
+	
+		.card-primary.card-outline {
+			border-top: 3px solid #8C4646 ;  !important;
+			display: flex;
+		}
+		
+		.ponteiro{
+			
+			cursor:pointer;
+			
+		}
+		
+		h3:hover{
+		opacity: 0.7;
+		color: 8C4646;
+		}
+		
+		#inst_avalia {
+  text-align: center;
+  color: red;
+
+ td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  color: blue;
+   padding: 15px;
+ 
+
+}
+		
+	</style>
+	
+	
+</head>
+<div class="wrapper">
+    <div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<input type="hidden" name="acao" id="acao" value=""/>
+					<div class="row mb-4">
+						<div class="col-sm-12">
+							<div class="titulo"></br></br></br>
+								<h1 style="float:left;">EVOLUÇÃO DE FISIOTERAPIA</h1>
+							</div> 	
+						</div>
+					</div>
+				</div>
+			</section>
+
+         <div id="container" style="margin-top: -10px; width:75%;">
+				<form id="form1" name="form1" method="post" action="....">
+					<input type="hidden" id="div_item" name="div_item" value="">
+					<section class="content">
+						<div class="container-fluid">
+							<div class="row">
+							
+								<div class="col-12">
+									<div class="card card-primary card-outline">
+										<div class="card-header">
+											<h3 class="card-title">
+												<i class="fas fa-edit"></i>
+												<b>DADOS DA INTERNAÇÃO</b>
+											</h3>
+										</div>
+										<div class="card-body pad">
+											<div class="row clearfix">
+												<table id="formularios" cellpadding="5">
+												<tr>
+														<td><b>Data Da Internação: </b><?php echo $data_internacao;?> </td>
+														<td><b>Cartão Do Sus:</b><?php echo $CNS;?>&nbsp;&nbsp;&nbsp;</td>
+														<td><b>CNES :</b> 2288338</td>
+													</tr>
+													
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</section>
+	
+	             <section class="content">	
+				   <div class="col-12">
+							<div class="card card-outline card-primary collapsed-card">
+								<div class="card-header ponteiro" data-card-widget="collapse">
+									<h3 class="card-title">
+										<i class="fas fa-edit"></i><b>
+										HISTÓRIA DA DOENÇA ATUAL</b>
+									</h3>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<i class="fas fa-plus"></i>
+										</button>
+									   </div>
+								     </div>
+											<div class="card-body pad">
+												<div class="row clearfix">
+													<table id="formularios" cellpadding="5">
+															<tr>
+																<td>
+																	
+																	<b>Hospitalizado por:</b>
+																	<textarea 
+																	id="hospital_por" 
+																	name="hospital_por" 
+																	style="width:100%;height:25px" 
+																	onKeyDown="maxLength('hospital_por', 1000);" 
+																	onKeyUp="maxLength('hospital_por',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																	
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<b>Doenças prévias / Complicações:</b>
+																	<textarea 
+																	id="doenca_p_comp" 
+																	name="doenca_p_comp " 
+																	style="width:100%;height:25px" 
+																	onKeyDown="maxLength('doenca_p_comp', 1000);" 
+																	onKeyUp="maxLength('doenca_p_comp',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+															
+															<tr>
+																<td>
+																	<b>Fisiodiagnóstico:</b>
+																	<textarea 
+																	id="fisio_diag" 
+																	name="fisio_diag" 
+																	style="width:100%;height:25px" 
+																	onKeyDown="maxLength('fisio_diag', 1000);" 
+																	onKeyUp="maxLength('fisio_diag',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+															
+															 <tr>
+																<td>
+																	<b>Informações-chave:</b>
+																	<textarea 
+																	id="info_ch" 
+																	name="info_ch" 
+																	style="width:100%;height:25px" 
+																	onKeyDown="maxLength('info_ch', 1000);" 
+																	onKeyUp="maxLength('info_ch',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+													
+															
+													</table>
+											</div>
+										</div>
+							</div>
+					</div>
+					</section>
+							
+	
+           <section class="content">	
+			<div class="col-12">
+				<div id ="inst_av_reav">
+							<div class="card card-outline card-primary collapsed-card">
+								<div class="card-header ponteiro" data-card-widget="collapse">
+									<h3 class="card-title">
+										<i class="fas fa-edit"></i><b>
+										ESCALAS E MEDIDAS</b>
+									     </h3>
+									       <div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<i class="fas fa-plus"></i>
+										   </button>
+									      </div>
+								            </div>
+											 		  
+								<div class="card-body pad">
+									<div class="row clearfix">
+								<table id="inst_avalia" cellpadding="15"/>
+										<thead>
+											<tr>
+											<th>Instrumentos de Avaliação</th>
+											<th colspan="2">Data / Resultados</th>
+															
+														</tr>
+													</thead>
+													<tbody> 
+														<tr>
+															<td>Dinamometria</td>
+															<td >
+																1ª Avaliação <input  type="date" id="ev_data_dina" name="ev_data_dina" value=""/>
+																<input  type="text" id="ev_dina_kgf" name="ev_dina_kgf"  value=""SIZE="5"/>
+															</td>
+														</tr>
+														<tr>
+															<td>Teste de Velocidade da Marcha (4 metros)</td>
+															<td>
+													1ª Avaliação 
+															aberto
+															m/s <input  type="date" id="ev_data_teste_v_marcha" name="ev_data_teste_v_marcha"value=""/>&nbsp;&nbsp;Tempo:&nbsp
+																<input type="text" id="ev_tempo_v_marcha" name="ev_tempo_v_marcha" value=""SIZE="5" />&nbsp;Seg
+															</td>
+															<td>Velocidade:&nbsp;<input type="text" id="ev_velocidade_v_marcha" name="ev_velocidade_v_marcha" value=""SIZE="5"/>m/s</td>
+														</tr>
+														<tr>
+															<td>Teste de Sentar e Levantar (5 repeti?s)</td>
+															<td>
+															1ª Avaliação bpm<input type="date" id="ev_data_teste_s_l" name="ev_data_teste_s_l"  value=""/> &nbsp;&nbsp;Tempo:&nbsp; 
+															<input type="text" id="ev_tempo_s_l" name="ev_tempo_s_l"  value=""SIZE="5"/>&nbsp;Seg
+															</td>
+															<td>FCm?&nbsp;<input type="text" id="ev_forca_max_sl"name="ev_forca_max_sl"  value=""SIZE="5"/>bpm</td>
+														</tr>
+														
+													</tbody>
+											</table>
+															
+															
+														
+													</table>
+													 
+														   <table class="table table-hover"/>
+															<thead><b></b>
+															  <tr><th>Instrumentos de Avaliação / Reavaliação</th>
+																<th>1ª Aval</th>
+																<th>+ 7 dias</th>
+																<th>+ 7 dias</th>
+																<th>+ 7 dias</th>
+																<th>+ 7 dias</th>
+																<th>+ 7 dias</th>
+																
+																
+															  </tr>
+															</thead>
+															
+														
+														<tbody> <tr>
+																<td> CPAX (UTI)</td>
+																<td> <input type="date" id="data_cpax_uti" name="data_cpax_uti" value=""/><BR><BR>
+																<input type="text" id="cpax_uti"   name="cpax_uti" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_cpax_uti_1" name="data_cpax_uti_1"  value=""/><br><br>
+																<input type="text" id="cpax_uti_1"   name="cpax_uti_1" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_cpax_uti_2" name="data_cpax_uti_2"  value=""/><br><br>
+																<input type="text" id="cpax_uti_2"   name="cpax_uti_2" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_cpax_uti_3" name="data_cpax_uti_3"  value=""/><br><br>
+																<input type="text" id="cpax_uti_3"   name="cpax_uti_3" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_cpax_uti_4" name="data_cpax_uti_4"  value=""/><br><br>
+																<input type="text" id="cpax_uti_4" name="cpax_uti_4" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_cpax_uti_5" name="data_cpax_uti_5"  value=""/><br><br>
+																<input type="text" id="cpax_uti_5"   name="cpax_uti_5" value="" SIZE =5 /></td>
+																
+																
+																</tr>
+															</tbody>
+															
+															<tbody> <tr>
+															   
+															   <td> FSS-ICU (Enfermaria)</td>
+																<td> <input type="date" id="data_fss_icu" name="_data_fss_icu"  value=""/><br><br>
+																<input type="text" id="fss_icu"   name="fss_icu" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_fss_icu_1" name="data_fss_icu_1"  value=""/><br><br>
+																<input type="text" id="fss_icu_1"   name="fss_icu_1" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id= "data_fss_icu_2"name="data_fss_icu_2"  value=""/><br><br>
+																<input type="text" id="fss_icu_2"   name="fss_icu_2" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_fss_icu_3" name="data_fss_icu_3"  value=""/><br><br>
+																<input type="text" id="fss_icu_3"   name="fss_icu_3" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id= "data_fss_icu_4"name="data_fss_icu_4"  value=""/><br><br>
+																<input type="text" id="fss_icu_4"   name="fss_icu_4" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_fss_icu_5" name="data_fss_icu_5"  value=""/><br><br>
+																<input type="text" id="fss_icu_5"   name="fss_icu_5" value="" SIZE =5 /></td>
+																
+															
+																
+															  </tr>
+															  
+															  
+															</tbody>
+															
+																<tbody> <tr>
+																<td> Teste de Marcha Estacionária</td>
+																<td> <input type="date" id="data_teste_mar_est" name="data_teste_mar_est" value=""/><br><br>
+																<input type="text" id="teste_mar_est"   name="teste_mar_est" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_teste_mar_est_1" name="data_teste_mar_est_1"  value=""/><br><br>
+																<input type="text" id="teste_mar_est_1"   name="teste_mar_est_1" value="" SIZE =5 /></td>
+																<br><br>
+																<td> <input type="date" id="data_teste_mar_est_2" name="data_teste_mar_est_2"  value=""/><br><br>
+																<input type="text" id="teste_mar_est_2"   name="teste_mar_est_2" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_teste_mar_est_3" name="data_teste_mar_est_3"  value=""/><br>
+																<br>
+																<input type="text" id="teste_mar_est_3"   name="teste_mar_est_3" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_teste_mar_est_4" name="data_teste_mar_est_4"  value=""/><br><br>
+																<input type="text" id="teste_mar_est_4"   name="teste_mar_est_4" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_teste_mar_est_5" name="data_teste_mar_est_5"  value=""/><br><br>
+																<input type="text" id="teste_mar_est_5"   name="teste_mar_est_5" value="" SIZE =5 /></td>
+																
+																
+																</tr>
+															</tbody>
+															
+															<tbody> <tr>
+															   
+															   <td> PImáx</td>
+																<td> <input type="date" id= "data_pimax"name="data_pimax"  value=""/><br><br>
+																<input type="text" id="pimax"   name="pimax" value="" SIZE =5 /></td>
+																
+																<td>
+																<input type="date" id="data_pimax_1" name="data_pimax_1"  value=""/><br><br>
+																<input type="text" id="pimax_1"   name="pimax_1" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_pimax_2" name="data_pimax_2"  value=""/><br><br>
+																<input type="text" id="pimax_2"   name="pimax_2" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_pimax_3"   name="data_pimax_3" value="" SIZE =5 /><br><br>
+																<input type="text" id="pimax_3"   name="pimax_3" value="" SIZE =5 /></td>
+																
+																<td> <input type="date" id="data_pimax_4" name="data_pimax_4"  value=""/><br><br>
+																<input type="text" id="pimax_4"   name="pimax_4" value="" SIZE =5 /></td>
+																
+																
+																<td> <input type="date" id="data_pimax_5" name="data_pimax_5"  value=""/><br><br>
+																<input type="text" id="pimax_5"   name="pimax_5" value="" SIZE =5 /></td>
+																
+															  </tr>
+															  </tbody>
+														</div>
+											</table>
+					</div>							
+										<table> 	
+													<tr>
+												<td>
+												
+											<b>Observações</b>
+																	<textarea 
+																	id="ev_fisio_obs" 
+																	name="ev_fisio_obs" 
+																	style="width:100%;height:40x" 
+																	onKeyDown="maxLength('ev_fisio_obs', 1000);" 
+																	onKeyUp="maxLength('ev_fisio_obs',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br><br>
+													
+                                                                    <b> Eficácia da Tosse:</b><br>
+														<input type="radio" id="efi_tosse" name="eficacia_tosse" value=""/>&nbsp;Eficaz &nbsp;
+														<input type="radio" id="pe_tosse" name="eficacia_tosse" value=""/>&nbsp;Pouco eficaz &nbsp;
+														<input type="radio" id="ine_tosse" name="eficacia_tosse" value=""/>&nbsp; Ineficaz (Necessita de Aspiração)<br>
+														
+																 <b> Secreção:</b><br>
+														<input type="radio" id="secreção_p" name="secreção" value="p"onclick="if(this.checked){document.getElementById('div_sec_aspec').style.display = 'block'}"/>&nbsp;Presente &nbsp;
+														<input type="radio" id="secreção_a" name="secreção" value="a"onclick="if(this.checked){document.getElementById('div_sec_aspec').style.display = 'none'}"/>&nbsp;Ausente<BR>
+														
+														
+														<div id="div_sec_aspec" <?php if (trim($secreção) == "p"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?>  >
+														
+														Aspecto:&nbsp;<input type="text" id="sec_aspecto" name="sec_aspecto" value=""SIZE="5" />&nbsp;
+															
+																	</div>	
+                                                     
+													
+													
+													<b>Sistema Neuromuscular: Quadro motor (Força muscular, Estabilidade, Equilíbrio, Transferências, Outros):</b><br>
+																	<textarea 
+																	id="sis_neurom" 
+																	name="sis_neurom" 
+																	style="width:100%;height:40x" 
+																	onKeyDown="maxLength('sis_neurom', 1000);" 
+																	onKeyUp="maxLength('sis_neurom',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br><br>
+													
+														<b>Marco de Mobilidade Independente (Regua):&nbsp;</b>
+														<select style="width:150px" name="marco_mob_ind" id="marco_mob_ind" >
+															<option value="0" >Selecione</option>
+															<option value="1" >Restrito ao leito</option>
+															<option value="2" >Sedestação à beira do leito</option>
+															<option value="3" >Ortostatismo</option>
+															<option value="4" >Deambulação com auxílio</option>
+															<option value="5" >Deambulação sem auxílio</option>
+														</select>	
+													</td>
+												</tr>
+												</table>
+												<table></table>
+
+
+														
+												</div>
+											</div>	 
+						</div>
+								
+				</div>
+					
+			</section> 	
+				
+
+
+
+
+						
+
+					
+					
+						 
+						<section class="content">	
+							<div class="col-12">
+								<div class="card card-outline card-primary collapsed-card">
+									<div class="card-header ponteiro" data-card-widget="collapse">
+										<h3 class="card-title">
+											<i class="fas fa-edit"></i>
+											<b>PROCEDIMENTOS</b>
+										</h3>
+										<div class="card-tools">
+											<button type="button" class="btn btn-tool" data-card-widget="collapse">
+												<i class="fas fa-plus"></i>
+											</button>
+										</div>
+											<!-- /.card-tools -->
+									</div>
+									  <!-- /.card-header -->
+									<div class="card-body pad">
+										<div class="row clearfix">
+											<table id="formularios" cellpadding="5">
+												<tr>  
+													<td colspan = 2>
+														1:&nbsp;</b><select style="width:150px" name="ev_proced_1" id="ev_proced_1" >
+														<option value="0" >Selecione...</option>
+														<option value="1" >0211030015-AVALIACAO CINEMATICA E DE PARAMETROS LINEARES</option>
+														<option value="2" >0211030023-AVALIACAO CIN?ICA, CINEMÁTICA E DE PARETROS LINEARES</option>
+														<option value="3" >0211030031-AVALIA!O DE EQUIL?RIO ESTÁTICO EM PLACA DE FOR?</option>
+														<option value="4" >0211030040-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA</option>
+														<option value="5" >0211030058-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA COM TRANSDUTORES MICROPROCESSADOS</option>
+														<option value="5" >0211030074-AVALIA!O FUNCIONAL MUSCULAR </option>
+														<br>
+													</td>
+												</tr>
+												<tr>
+													<td colspan = 2>
+														2:&nbsp;</b><select style="width:150px" name="ev_proced_2" id="ev_proced_2" >
+														<option value="0" >Selecione...</option>
+														<option value="1" >0211030015-AVALIACAO CINEMATICA E DE PARAMETROS LINEARES</option>
+														<option value="2" >0211030023-AVALIACAO CIN?ICA, CINEMÁTICA E DE PARETROS LINEARES</option>
+														<option value="3" >0211030031-AVALIA!O DE EQUIL?RIO ESTÁTICO EM PLACA DE FOR?</option>
+														<option value="4" >0211030040-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA</option>
+														<option value="5" >0211030058-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA COM TRANSDUTORES MICROPROCESSADOS</option>
+														<option value="5" >0211030074-AVALIA!O FUNCIONAL MUSCULAR </option>
+														<br>
+													</td>
+												</tr>
+												<tr>		
+													<td colspan = 2>
+														3:&nbsp;</b><select style="width:150px" name="ev_proced_3" id="ev_proced_3" >
+														<option value="0" >Selecione...</option>
+														<option value="1" >0211030015-AVALIACAO CINEMATICA E DE PARAMETROS LINEARES</option>
+														<option value="2" >0211030023-AVALIACAO CIN?ICA, CINEMÁTICA E DE PARETROS LINEARES</option>
+														<option value="3" >0211030031-AVALIA!O DE EQUIL?RIO ESTÁTICO EM PLACA DE FOR?</option>
+														<option value="4" >0211030040-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA</option>
+														<option value="5" >0211030058-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA COM TRANSDUTORES MICROPROCESSADOS</option>
+														<option value="5" >0211030074-AVALIA!O FUNCIONAL MUSCULAR </option>
+														<br>
+													</td>
+												</tr>
+												<tr>
+													<td colspan = 2>
+														4:&nbsp;</b><select style="width:150px" name="ev_proced_4" id="ev_proced_4" >
+														<option value="0" >Selecione...</option>
+														<option value="1" >0211030015-AVALIACAO CINEMATICA E DE PARAMETROS LINEARES</option>
+														<option value="2" >0211030023-AVALIACAO CIN?ICA, CINEMÁTICA E DE PARETROS LINEARES</option>
+														<option value="3" >0211030031-AVALIA!O DE EQUIL?RIO ESTÁTICO EM PLACA DE FOR?</option>
+														<option value="4" >0211030040-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA</option>
+														<option value="5" >0211030058-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA COM TRANSDUTORES MICROPROCESSADOS</option>
+														<option value="5" >0211030074-AVALIA!O FUNCIONAL MUSCULAR </option>
+														<br>
+													</td>
+												</tr>
+												<tr>
+													<td colspan = 2>
+														5:&nbsp;</b><select style="width:150px" name="ev_proced_5" id="ev_proced_5" >
+														<option value="0" >Selecione...</option>
+														<option value="1" >0211030015-AVALIACAO CINEMATICA E DE PARAMETROS LINEARES</option>
+														<option value="2" >0211030023-AVALIACAO CIN?ICA, CINEMÁTICA E DE PARETROS LINEARES</option>
+														<option value="3" >0211030031-AVALIA!O DE EQUIL?RIO ESTÁTICO EM PLACA DE FOR?</option>
+														<option value="4" >0211030040-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA</option>
+														<option value="5" >0211030058-AVALIA!O DE FUN!O E MEC?ICA RESPIRAT?IA COM TRANSDUTORES MICROPROCESSADOS</option>
+														<option value="5" >0211030074-AVALIA!O FUNCIONAL MUSCULAR </option>
+														<br>
+													</td>
+												</tr>	
+											</table>
+										</div>	 				 
+									</div>
+								</div>
+							</div>
+						</section>	
+	<section class="content">	
+							<div class="col-12">
+								<div class="card card-outline card-primary collapsed-card">
+									<div class="card-header ponteiro" data-card-widget="collapse">
+											<h3 class="card-title">
+												<i class="fas fa-edit"></i>
+												<b>EXAME FÍSICO</b>
+											</h3>
+										<div class="card-tools">
+											<button type="button" class="btn btn-tool" data-card-widget="collapse">
+												<i class="fas fa-plus"></i>
+											</button>
+										</div>
+											
+									</div>
+									  
+									<div class="card-body pad">
+										<div class="row clearfix">
+											<table id="formularios" cellpadding="5">
+												<tr>  
+													<td colspan = 5>
+														<b>Estado Mental</b>
+													</td>
+												</tr>
+												
+												<tr>
+													<td>
+														<input type="radio" id="alerta" name="estado_mental"  value=""/>&nbsp;&nbsp;Alerta&nbsp;&nbsp;
+														
+														<input type="radio" id="letargico" name="estado_mental"  value=""/>
+														Letárgico&nbsp;&nbsp;
+														<input type="radio" id="confuso" name="estado_mental"  value=""/>
+														Confuso&nbsp;&nbsp;
+														<input type="radio" id="Torporoso" name="estado_mental"  value=""/>
+														Torporoso&nbsp;&nbsp;
+														<input type="radio" id="comatoso" name="estado_mental"  value=""/>
+														Comatoso&nbsp;&nbsp;
+														<input type="radio" id="sedado" name="estado_mental"  value=""/>
+														Sedado
+														<br>
+														<br>
+												
+														<b>Escala de Agitação-Sedação de Richmond (RASS):&nbsp;<b>
+														<select style="width:150px" name="esc_agt_rch" id="esc_agt_rch">
+															<option value="0" >Selecione...</option>
+															<option value="1" >0</option>
+															<option value="2" >1</option>
+															<option value="3" >2</option>
+															<option value="4" >3</option>
+															<option value="5" >4</option>
+															<option value="6" >5</option>
+															<option value="7" >6</option>
+															<option value="8" >7</option>
+															<option value="9" >8</option>
+															<option value="10" >9</option>
+															<option value="11" >10</option>
+														</select>
+													</td>
+												</tr>
+												<tr>  
+													<td colspan = 3>
+													<b>Sistema Cardiorrespiratório:</b><br>
+														<b>Sinais Vitais:</b>
+												</td>	
+												</tr>	
+												
+												<td>
+														&nbsp;&nbsp;FC:<input type="text" id="sinais_vitais_bpm" name="sinais_vitais_bpm"  value=""SIZE="5"/> bpm 
+														&nbsp;&nbsp;FR:<input type="text" id="sinais_vitais_irpm" name="sinais_vitais_irpm"  value=""SIZE="5"/> irpm 
+														&nbsp;&nbsp;PA:<input type="text" id="sinais_vitais_mmhg" name="sinais_vitais_mmhg"  value=""SIZE="5"/> mmHg
+														&nbsp;&nbsp;SaO2:<input type="text" id="sinais_vitais_aa" name="sinais_vitais_aa"  value=""SIZE="5"/>%(AA)
+														&nbsp;&nbsp;SaO2:<input type="text" id="sinais_vitais_o2" name="sinais_vitais_o2"  value=""SIZE="5"S/>%(O2)
+														<br>
+													<br>
+												
+													<b>Sinais de Esforço Muscular:</b><br>
+														<input type="checkbox" id="sinais_esf_musc_b" name="sinais_esf_musc_b"  value=""/> BAN&nbsp;&nbsp;
+														<input type="checkbox" id="sinais_esf_musc_tr" name="sinais_esf_musc_tr"  value=""/>Tiragem&nbsp;&nbsp
+														<input type="checkbox" id="sinais_esf_musc_uma" name="sinais_esf_musc_uma"  value=""/> Uso de musculatura acessória&nbsp;&nbsp;
+														<input type="checkbox" id="sinais_esf_musc_au" name="sinais_esf_musc_au"value=""/>Ausente&nbsp;&nbsp;
+														<input type="checkbox" id="sinais_esf_musc_out" name="sinais_esf_musc_out"  value=""/>Outros&nbsp;&nbsp;
+														<br><br>
+													<b>Sensação de Dispneia (Escala Numérica Analógica):&nbsp;</b>
+														<select style="width:150px" name="sens_disp_ena" id="sens_disp_ena" >
+															<option value="0" >Selecione</option>
+															<option value="1" >Restrito ao leito</option>
+															<option value="2" >Sedesta eira do leito</option>
+															<option value="3" >Ortostatismo</option>
+															<option value="4" >Deambula com auxilio</option>
+															<option value="5" >Deambula sem auxilio</option>
+														</select><br>	
+														<b>Ausculta Pulmonar:</b><br>
+														
+												
+		<tr>  
+													<td colspan = 5>
+														   <b>Ventilação:</b>
+                                                        <br>
+														<input type="radio" id="ventilacao_esp" name="ventilacao" value="1"onclick="if(this.checked){document.getElementById('div_vent_ox').style.display = 'block'}"/>&nbsp;Espontânea  &nbsp;
+														<input type="radio" id="ventilacao_mec_in" name="ventilacao" value="2"onclick="if(this.checked){document.getElementById('div_vent_mec_inv').style.display = 'block'}"/>&nbsp;Ventilação Mecânica Invasiva
+														<input type="radio" id="ventilacao_mec_n" name="ventilacao" value="3"onclick="if(this.checked){document.getElementById('div_vent_mec_ninv').style.display = block'}"/>&nbsp;Ventilação Não Invasiva &nbsp 
+														
+														
+														<div id="div_vent_ox" <?php if (trim($ventilacao) == "1"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?>  >
+														
+														&nbsp;<input type="radio" id="vent_ar_amb" name="venti_ox" value="1" onclick="if(this.checked){document.getElementById('div_oxigeno').style.display = 'none'}"/>&nbsp;Ar ambiente   
+														<input type="radio" id="vent_ox" name="venti_ox" value="2" onclick="if(this.checked){document.getElementById('div_oxigeno').style.display = 'block'}"/>&nbsp;Oxigenoterapia 
+															
+																	</div>	
+                                                     
+                                                 <div id="div_oxigeno" <?php if (trim($venti_ox) == "2"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?> >
+														
+														<input type="radio" id="vent_ox_c" name="vent" value="" />&nbsp;Cateter Nasal de O2  &nbsp;<input type="text" id="vent_no2" name="vent_no2" value="" SIZE="5" />&nbsp; l/min
+														
+														<input type="radio" id="vent_ox_mnbz" name="vent" value="" />&nbsp;MNBZ:&nbsp;<input type="text" id="vent_mnbz" name="vent_mnbz" value=""SIZE="5" />&nbsp; l/min
+														
+														<input type="radio" id="vent_ox_mcr" name="vent" value="" />&nbsp;Máscara com reservatório<input type="text" id="vent_mcr" name="vent_mcr" value="" SIZE="5" />&nbsp;l/min
+														
+														<input type="radio" id="vent_ox_cnaf" name="vent" value="" />&nbsp;CNAF: <input type="text" id="vent_cnaf" name="vent_cnaf" value=""SIZE="5" />&nbsp;l/min  	
+														
+														</div>	
+														<tr>
+                                                    <td colspan = 5>
+                                              <div id="div_vent_mec_inv" <?php if (trim($ventilacao) == "2"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?> >
+														Peso Predito: <input type="text" id="peso_pred" name="peso_pred" value="" SIZE="5" />
+														Início da VMI:&nbsp;<input type="date" id="inicio_da_vmi" name="inicio_da_vmi" value="" />
+													    Fim da VMI:&nbsp;<input type="date" id="fim_da_vmi" name="fim_da_vmi" value="" />
+														Justificativa da VMI:&nbsp;<input type="text" id="just_vmi" name="just_vmi" value="" SIZE="5" />
+														
+														 <table class="table table-hover"/>
+															<thead><b></b>
+															  <tr><th>Parâmetros ventilatórios:</th>
+															
+																
+																
+															  </tr>
+															</thead>
+															
+														
+														<tbody> <tr>
+																<td> <input type="radio" id="pv_ac_pcv"   name="p_v" value="" />&nbsp;AC/PCV </td>
+																<td>Ppico: 
+																<input type="text" id="pv_ppico"   name="pv_ppico" value="" SIZE =5 />cmH2O</td>
+																
+																<td>Vt:  
+																<input type="text" id="pv_vt"   name="pv_vt" value="" SIZE =5 />ml</td>
+																
+																<td> Pplatô: 
+																<input type="text" id="pv_pplato"   name="pv_pplato" value="" SIZE =5 /> cmH2O</td>
+																
+																</tr>
+															</tbody>
+															
+															<tbody> <tr>
+															   
+															   <td><input type="radio" id="pv_ac_vcv"   name="p_v" value=""  />&nbsp;AC/VCV</td>
+																<td> Fluxo: 
+																<input type="text" id="pv_fluxo"   name="pv_fluxo" value="" SIZE =5 />l/min</td>
+																
+																<td> Compl. Est.: 
+																<input type="text" id="pv_comp_est"   name="pv_comp_est" value="" SIZE =5 />ml/cmH2O</td>
+																
+																
+															  </tr>
+															  
+															  
+															</tbody>
+															
+																<tbody> <tr>
+																<td><input type="radio" id="pv_psv"   name="p_v" value=""  /> PSV </td>
+																<td> Pins: 
+																<input type="text" id="pv_pins"   name="pv_pins" value="" SIZE =5 />cmH2O</td>
+																
+																<td> P Sup: 
+																<input type="text" id="pv_psup"   name="pv_psup" value="" SIZE =5 />cmH2O</td>
+																
+																<td> Driving Pressure: 
+																<input type="text" id="pv_dp"   name="pv_dp" value="" SIZE =5 />&nbsp;cmH2O</td>
+																
+																
+																</tr>
+															</tbody>
+															
+															<tbody> <tr>
+															   
+															   <td> <input type="radio" id="pv_ac_prvc"   name="p_v" value=""  />&nbsp;AC / PRVC</td>
+																<td> PEEP:
+																<input type="text" id="pv_peep"   name="pv_peep" value="" SIZE =5 />&nbsp;cmH2O</td>
+																
+															
+															  </tr>
+															  </tbody>
+															  
+															 <tbody> <tr>
+															   
+															   <td> <input type="radio" id="pv_pav"   name="p_v" value=""  />&nbsp;PAV</td>
+																<td>  % Sup
+																<input type="text" id="pv_sup"   name="pv_sup" value="" SIZE =5 />%</td>
+																
+															  </tr>
+															  </tbody> 
+															  
+															   <tbody> <tr>
+															   
+															   <td> <input type="radio" id="pv_outros"   name="p_v" value=""  />&nbsp;outros</td>
+																<td> % Sup
+																<input type="text" id="pimax"   name="pimax" value="" SIZE =5 />%</td>
+																
+																<td> FiO2
+																<input type="text" id="pv_fio2"   name="pv_fio2" value="" SIZE =5 />%</td>
+																
+																
+															  </tr>
+															  </tbody> 
+															  
+															  <tr>
+                                                    <td colspan = 2><b>Ajustes de VM após atendimento:</b><br>
+													<input type="checkbox" id="aj_vm_pos" name="aj_vm_prona" value="" />&nbsp;Prona&nbsp;
+														<input type="checkbox" id="aj_vm_titu" name="aj_vm_titu" value="" />&nbsp;Titulação
+															  
+															  
+													</td> 
+													</tr>		  
+															  
+														 <tr>
+                                                    <td colspan = 2><b>Curarização:</b><br>
+													<input type="checkbox" id="aj_vm_pos" name="aj_vm_prona" value="" />&nbsp;Sim&nbsp;
+														<input type="checkbox" id="aj_vm_titu" name="aj_vm_titu" value="" />&nbsp;Não
+															  
+														,<p>Dias de curarização</p>	<select id="tipo_tqt" name="tipo_tqt">
+													<option value="0">SELECIONE...</option>
+													<option value="1">Portex</option>
+													<option value="2">Metálica</option>
+													 <option value="3">Ajustável</option>
+													<option value="4">Shiley</option>
+												</select>  
+													</td> 
+													</tr>		  	  
+													 <td colspan = 2><b>Ajustes de VM após atendimento:</b><br>
+													<input type="checkbox" id="aj_vm_pos" name="aj_vm_prona" value="" />&nbsp;Prona&nbsp;
+														<input type="checkbox" id="aj_vm_titu" name="aj_vm_titu" value="" />&nbsp;Titulação
+														<input type="checkbox" id="aj_vm_pos" name="aj_vm_prona" value="" />&nbsp;Prona&nbsp;
+														<input type="checkbox" id="aj_vm_titu" name="aj_vm_titu" value="" />&nbsp;Titulação	  
+														<input type="checkbox" id="aj_vm_titu" name="aj_vm_titu" value="" />&nbsp;Titulação	  	  
+													</td> 
+													
+													
+													</tr>		
+													
+													<input type="radio" id="vent_ox_c" name="vent" value="" />&nbsp;se aplica  &nbsp;<input type="text" id="vent_no2" name="vent_no2" value="" SIZE="5" />&nbsp; l/min
+														
+														<input type="radio" id="vent_ox_mnbz" name="vent" value="" />&nbsp;não se aplica &nbsp;<input type="text" id="vent_mnbz" name="vent_mnbz" value=""SIZE="5" />&nbsp; l/min
+														
+															  
+														</div>
+														
+													<tr>
+                                                    <td colspan = 5>
+                                              <div id="div_vent_mec_ninv" <?php if (trim($ventilacao) == "3"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?> >
+														Peso Predito: <input type="text" id="peso_pred" name="peso_pred" value="" SIZE="5" />
+														Início da VMI:&nbsp;<input type="date" id="inicio_da_vmi" name="inicio_da_vmi" value="" />
+													    Fim da VMI:&nbsp;<input type="date" id="fim_da_vmi" name="fim_da_vmi" value="" />
+														Justificativa da VMI:&nbsp;<input type="text" id="just_vmi" name="just_vmi" value="" SIZE="5" />
+															
+														</td></tr>
+														</div>
+														
+														
+														
+														
+														
+														
+														
+														
+											</table>
+									</div>		
+											
+									</div>					
+														
+														</div>	
+
+  
+</td></tr>
+								
+											<tr>
+												<td colspan = 5>
+											<b>Via Aérea:</b><br>
+											<input type="radio" id="via_ae_svia_art" name="via_aerea" value="1" 
+												   onclick="document.getElementById('div_via_ae_tot').style.display='none'; document.getElementById('div_via_ae_tqt').style.display='none';"/>
+											Sem via aérea artificial
+
+
+											<input type="radio" id="via_ae_tot" name="via_aerea" value="2" 
+												   onclick="document.getElementById('div_via_ae_tot').style.display='block'; document.getElementById('div_via_ae_tqt').style.display='none';"/>
+											TOT
+
+
+											<input type="radio" id="via_ae_tqt" name="via_aerea" value="3" 
+												   onclick="document.getElementById('div_via_ae_tot').style.display='none'; document.getElementById('div_via_ae_tqt').style.display='block';"/>
+											TQT
+											<br>
+
+											<div id="div_via_ae_tot"<?php if (trim($via_aerea) == "1"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?>  >
+																									 
+												<b>TOT:</b>
+												Início: <input type="date" id="via_ae_inicio_tot" name="via_ae_inicio_tot">
+												Fim: <input type="date" id="via_ae_fim_tot" name="via_ae_fim_tot">
+												Nº: <input type="text" id="via_ae_num_tot" name="via_ae_num_tot">
+												CL: <input type="text" id="via_ae_cl_tot" name="via_ae_cl_tot">
+												Pcuff: <input type="text" id="via_ae_pcuff_tot" name="via_ae_pcuff_tot"> cmH2O
+												
+											</div>			
+																								
+											<div id="div_via_ae_tqt"<?php if (trim($via_aerea) == "3"){ ?> style="display:block" <?php }else{?>  style="display:none"  <?php }?>  >
+												
+												<b> TQT:</b>
+												
+												Início: <input type="date" id="via_ae_inicio_tqt" name="via_ae_inicio_tqt">
+												Fim: <input type="date" id="via_ae_fim_tqt" name="via_ae_fim_tqt">
+												Nº: <input type="text" id="via_ae_num_tqt" name="via_ae_num_tqt">
+												Tipo: 
+												<select id="tipo_tqt" name="tipo_tqt">
+													<option value="0">SELECIONE...</option>
+													<option value="1">Portex</option>
+													<option value="2">Metálica</option>
+													 <option value="3">Ajustável</option>
+													<option value="4">Shiley</option>
+												</select>
+												Pcuff: <input type="text" id="via_ae_pcuff_tqt" name="via_ae_pcuff_tqt"> cmH2O
+												</tr></td><br>
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+											</div>														 
+																									
+
+													
+															</div>
+														 
+														
+															
+																	</div>	
+														
+													
+														
+												</td>	
+												</tr>	
+												
+												
+											</table>
+										</div>	 				 
+									</div>
+								</div>
+							</div>
+						</section>					 
+						
+						<section class="content">	
+						<div class="col-12">
+							<div class="card card-outline card-primary collapsed-card">
+								<div class="card-header ponteiro" data-card-widget="collapse">
+									<h3 class="card-title">
+										<i class="fas fa-edit"></i>
+										<b>INFORMAÇÕES COMPLEMENTARES</b>
+									</h3>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<i class="fas fa-plus"></i>
+										</button>
+									 </div>
+										<!-- /.card-tools -->
+								</div>
+								  <!-- /.card-header -->
+								<div class="card-body pad">
+									<div class="row clearfix">
+										<table id="formularios" cellpadding="5">
+											
+																<tr>
+																	<td>
+																	<b>Fármacos:</b>
+																	<textarea 
+																	id="ev_farmacos" 
+																	name="ev_farmacos" 
+																	style="width:200%;height:40x" 
+																	onKeyDown="maxLength('ev_farmacos', 1000);" 
+																	onKeyUp="maxLength('ev_farmacos',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																	
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<b>Exames de Imagem:</b>
+																	<textarea 
+																	id="ev_exm_img" 
+																	name="ev_exm_img" 
+																	style="width:200%;height:40px" 
+																	onKeyDown="maxLength('ev_exm_img', 1000);" 
+																	onKeyUp="maxLength('ev_exm_img',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+															
+															<tr>
+																<td>
+																	<b>Impressão:</b>
+																	<textarea 
+																	id="ev_impressao" 
+																	name="ev_impressao" 
+																	style="width:200%;height:40px" 
+																	onKeyDown="maxLength('ev_impressao', 1000);" 
+																	onKeyUp="maxLength('ev_impressao',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+															
+															 <tr>
+																<td>
+																	<b>Metas:</b>
+																	<textarea 
+																	id="ev_metas" 
+																	name="ev_metas"
+																	style="width:200%;height:40px" 
+																	onKeyDown="maxLength('ev_metas', 1000);" 
+																	onKeyUp="maxLength('quadro_resp',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+											
+											
+											<tr>
+											<td>	                <b>Programação:</b>
+																	<textarea 
+																	id="ev_prog" 
+																	name="ev_prog" 
+																	style="width:200%;height:40px" 
+																	onKeyDown="maxLength('ev_prog', 1000);" 
+																	onKeyUp="maxLength('ev_prog',8000);return verificaCaracteresRestantes(this.value,'caracteres_restantesEnc');"></textarea><br/>
+																</td>
+															</tr>  
+											
+										</table>			
+									</div>
+								</div>	 
+							</div>
+									
+						</div>
+					</section>               							  
+						
+					<section class="content">	
+						<div class="col-12">
+							<div class="card card-outline card-primary collapsed-card">
+								<div class="card-header ponteiro" data-card-widget="collapse">
+									<h3 class="card-title">
+										<i class="fas fa-edit"></i>
+										<b>CONDUTA</b>
+									</h3>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
+									<!-- /.card-tools -->
+								</div>
+											  <!-- /.card-header -->
+								<div class="card-body pad">
+									<div class="row clearfix">
+										<table id="formularios" cellpadding="4">
+											 <tr>
+												<td colspan = 3>		
+													<input type="checkbox"  id="ev_posi"  name="ev_posi" value="" />&nbsp;Posicionamento
+													<br>
+													<input type="checkbox"  id="ev_ele_cabe"  name="ev_ele_cabe" value="" />&nbsp;Elevação de cabeceira
+													<br>
+													<input type="checkbox"  id="ev_aux_iot" name="ev_aux_iot" value="" />&nbsp;Auxílio IOT
+													<br>
+													<input type="checkbox"  id="ev_moni_vmi"  name="ev_moni_d_vmi" value="" />&nbsp;Monitorização de VMI
+													<br>
+													<input type="checkbox"  id="ev_aj_para_vmi"  name="ev_aj_para_vmi" value="" />&nbsp;Ajuste de Parâmetros de VMI
+													<br>
+													<input type="checkbox"  id="ev_cuidados_vaa"  name="ev_cuidados_vaa" value="" />&nbsp;Cuidados com VAA
+													<br>
+													<input type="checkbox"  id="ev_fisio_motor"  name="ev_fisio_motor" value="" />&nbsp;Fisioterapia Motora:&nbsp; 
+													
+													<input type="text" id="ev_fisiom" name="ev_fisiom" value=""/>							
+												</td>
+												   <td>	<input type="checkbox"  id="ev_tec_deso"  name="ev_tec_deso" value="" />&nbsp;Técnicas desobstrutivas
+													<br>
+													<input type="checkbox"  id="ev_hiper_pul"  name="ev_hiper_pul" value="" />&nbsp;Hiperinsuflação pulmomar
+													<br>
+													<input type="checkbox"  id="ev_asp_via_aes" name="ev_asp_via_aes" value="" />&nbsp;Aspiração de vias aéreas superiores
+													<br>
+													<input type="checkbox"  id="ev_asp_endo"  name="ev_asp_endo" value="" />&nbsp;Aspiração endotraqueal
+													<br>
+													<input type="checkbox"  id="ev_des_vent"  name="ev_des_vent" value="" />&nbsp;Desmame ventilatório
+													<br>
+													<input type="checkbox"  id="ev_vni"  name="ev_vni" value="" />&nbsp;VNI
+																			
+												</td>
+												  <td>	<input type="checkbox"  id="ev_trei_musc_ins"  name="ev_trei_musc_ins" value="" />&nbsp;Treinamento muscular inspiratório
+													<br>
+													<input type="checkbox"  id="ev_titu_peep"  name="ev_titu_peep" value="" />&nbsp;Titulação de PEEP
+													<br>
+													<input type="checkbox"  id="ev_pos_prona" name="ev_pos_prona" value="" />&nbsp;Posicionamento em prona
+													<br>
+													<input type="checkbox"  id="ev_inst_tgi"  name="ev_inst_tgip" value="" />&nbsp;Instalação de TGI
+													<br>
+													<input type="checkbox"  id="ev_oxigeno"  name="ev_oxigeno" value="" />&nbsp;Oxigenoterapia
+													<br>
+													<input type="checkbox"  id="ev_proce_nreal"  name="ev_proce_nreal" value="" />&nbsp;Procedimento não realizado: <input type="text" id="ev_fisiom" name="ev_fisiom" value=""/>		
+													<br><br>
+													<input type="checkbox"  id="ev_out"  name="ev_out" value="" />&nbsp;Outros: <input type="text" id="ev_fisiom" name="ev_fisiom" value=""/>	
+												
+								</td>
+									  </tr>
+									  <td>
+													<b>Tipo de Cuidado: &nbsp;</b>
+														<select style="width:150px" name="tipo_cuid" id="tipo_cuid" >
+															<option value="0" >Selecione</option>
+															<option value="1" >- Cuidados mínimos</option>
+															<option value="2" >- Cuidados intermediários</option>
+															<option value="3" >- Cuidados semi-intensivos</option>
+															<option value="4" >- Cuidados intensivos</option>
+															
+														</select>	
+														</td>
+									     
+									  
+									  
+										</table>
+										
+									
+										
+									</div>	 				 
+								</div>					
+							</div>
+						</div>
+					</section>			
+						 	
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+ <div style="text-align:center">
+
+						<?php if($valor2['finalizado']!="S"){ ?>
+						<button class="btn btn-primary btn-sm" name="insereAltaFisioterapia" id="insereAltaFisioterapia" onclick="javascript: validaForm('incluido');" />Salvar</button>
+
+						<button class="btn btn-primary btn-sm" name="insereAltaFisioterapia" id="insereAltaFisioterapia" onclick="javascript:var sn = confirm ('Tem certeza que finalizar o preenchimento desse formul?o?\n Ap?? finaliza? n?ser?oss?l altera?!');
+									if (sn == false){
+										return false;
+									}  validaForm('finalizado');" />Finalizar</button>
+							<?php }else{ ?>
+									<button class="btn btn-primary btn-sm" name="RetificarAvaliacao_nutricional" id="RetificarAvaliacao_nutricional"  >Retificar</button>
+							<?php }?>
+
+						<button title="Fechar Tela"  class="btn btn-primary btn-sm" onclick="javascript:window.close();"/>Fechar</button>
+					</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						
+					</form>
+				</div>
+			</div>
+		</div>
+		
+	<div id="telas"></div>
+	<!-- jQuery -->
+	<script src="/sipec/plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="/sipec/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- ChartJS -->
+	<script src="/sipec/plugins/chart.js/Chart.min.js"></script>
+	<!-- sweetalert2 -->
+	<script src="/sipec/plugins/sweetalert2/sweetalert2.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="/sipec/dist/js/adminlte.min.js"></script>
+
+	<script type="text/javascript" src="../../../seg/js/jquery-1.11.0.min.js" language="JavaScript"></script>
+
+	<script src="../../js/bootstrap.min.js"></script>
+	<script src="../../js/bootstrap-select.js"></script>
+
+	<!-- JQuery DataTable Css -->
+	<link href="/sipec/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/rowreorder/1.2.6/css/rowReorder.dataTables.min.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+		
+	<link href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="/sipec/js/funcoes_comuns.js"></script>
+
+	 <!-- Bootstrap DatePicker -->
+	<link rel="stylesheet" href="/sipec/plugins/bootstrap/css/bootstrap-datepicker.css" type="text/css" />
+	<script src="/sipec/plugins/bootstrap/js/bootstrap-datepicker.js" type="text/javascript"></script>
+	  
+
+	<script src="../../js/jquery.mask.js"></script>
+	<script src="../../js/jquery.mask.min.js"></script>
+
+	 <!-- Jquery DataTable Plugin Js -->
+	<script src="/sipec/plugins/jquery-datatable/jquery.dataTables.js"></script>
+	<script src="/sipec/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+	<script src="/sipec/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+
+	</body>
+</html>
